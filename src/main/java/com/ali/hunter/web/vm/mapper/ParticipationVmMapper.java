@@ -8,11 +8,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface ParticipationMapper {
+public interface ParticipationVmMapper {
 
-    ParticipationMapper INSTANCE = Mappers.getMapper(ParticipationMapper.class);
+    ParticipationVmMapper INSTANCE = Mappers.getMapper(ParticipationVmMapper.class);
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user.id", source = "userId")
     @Mapping(target = "competition.id", source = "competitionId")
     Participation toParticipation(ParticipationVM participationVM);
 }
+

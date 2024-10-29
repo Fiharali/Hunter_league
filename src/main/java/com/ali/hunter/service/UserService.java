@@ -14,7 +14,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public List<User> searchUsers(UserSearchVM searchDTO) {
-        return userRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(searchDTO.getFirstName(), searchDTO.getLastName(), searchDTO.getEmail());
+    public List<User> searchUsers(User user) {
+        return userRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(user.getFirstName(), user.getLastName(), user.getEmail());
     }
 }

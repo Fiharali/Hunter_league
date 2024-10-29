@@ -5,6 +5,7 @@ import com.ali.hunter.dto.SpeciesDTO;
 import com.ali.hunter.dto.mapper.SpeciesMapper;
 import com.ali.hunter.service.SpeciesService;
 import com.ali.hunter.web.vm.SerchByCategorySpeciesVM;
+import com.ali.hunter.web.vm.mapper.SpeciesVmMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,15 @@ public class SpeciesAPI {
 
     private final SpeciesService speciesService;
     private final SpeciesMapper speciesMapper;
+    private final SpeciesVmMapper speciesVmMapper;
 
     @GetMapping
     public ResponseEntity<List<SpeciesDTO>> getSpecies(@Valid SerchByCategorySpeciesVM serchByCategorySpeciesVM) {
 
-        List<Species> species =  speciesService.getSpeciesByCategory(serchByCategorySpeciesVM);
+        Species speciesEntity = speciesVmMapper.toSpecies(serchByCategorySpeciesVM);
+
+        List<Species> species =  speciesService.getSpeciesByCategory(speciesEntity);
+
         List<SpeciesDTO> speciesDTOList = speciesMapper.toSpeciesDTOList(species);
         
         return ResponseEntity.ok(speciesDTOList);

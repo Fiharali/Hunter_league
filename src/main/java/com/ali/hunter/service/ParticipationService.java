@@ -30,7 +30,7 @@ public class ParticipationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Competition not found"));
 
         User user = userRepository.findById(participation.getUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("UserAPI not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Participation participation1 = Participation.builder()
                 .user(user)

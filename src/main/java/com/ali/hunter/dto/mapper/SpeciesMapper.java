@@ -15,8 +15,6 @@ public interface SpeciesMapper {
 
     @Mapping(target = "name", source = "name")
     @Mapping(target = "category", source = "category")
-
     SpeciesDTO toSpeciesDTO(Species species);
-
     List<SpeciesDTO> toSpeciesDTOList(List<Species> speciesList);
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParticipationVM {
-    @NotNull(message = "UserAPI ID cannot be null")
+    @NotNull(message = "User ID cannot be null")
     private UUID userId;
 
     @NotNull(message = "Competition ID cannot be null")

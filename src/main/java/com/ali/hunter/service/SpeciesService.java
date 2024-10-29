@@ -15,7 +15,7 @@ public class SpeciesService {
     private final SpeciesRepository speciesRepository;
 
 
-    public List<Species> getSpeciesByCategory(SerchByCategorySpeciesVM serchByCategorySpeciesVM) {
-        return speciesRepository.findByCategory(serchByCategorySpeciesVM.getCategory());
+    public List<Species> getSpeciesByCategory(Species species) {
+        return speciesRepository.findByCategory(species.getCategory());
     }
 }
