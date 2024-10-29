@@ -1,4 +1,4 @@
-package com.ali.hunter.service.dto;
+package com.ali.hunter.web.vm;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParticipationRequestDTO {
+public class ParticipationVM {
     @NotNull(message = "User ID cannot be null")
     private UUID userId;
 
