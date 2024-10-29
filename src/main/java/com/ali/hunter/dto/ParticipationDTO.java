@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 public class ParticipationDTO {
 
-    private User user;
-    private Competition competition;
+    private String username;
+    private String code;
 
 
 }

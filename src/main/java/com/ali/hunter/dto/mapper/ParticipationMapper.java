@@ -11,7 +11,7 @@ public interface ParticipationMapper {
 
     ParticipationMapper INSTANCE = Mappers.getMapper(ParticipationMapper.class);
 
-    @Mapping(target = "user.username", source = "user.username")
-    @Mapping(target = "competition.code", source = "competition.code")
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "code", source = "competition.code")
     ParticipationDTO toParticipationDTO(Participation participation);
 }
