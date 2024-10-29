@@ -1,5 +1,8 @@
 package com.ali.hunter.web.api;
 
+import com.ali.hunter.domain.entity.Species;
+import com.ali.hunter.dto.SpeciesDTO;
+import com.ali.hunter.dto.mapper.SpeciesMapper;
 import com.ali.hunter.service.SpeciesService;
 import com.ali.hunter.web.vm.SerchByCategorySpeciesVM;
 import jakarta.validation.Valid;
@@ -15,11 +18,14 @@ import java.util.List;
 public class SpeciesAPI {
 
     private final SpeciesService speciesService;
+    private final SpeciesMapper speciesMapper;
 
     @GetMapping
-    public ResponseEntity<List<com.ali.hunter.domain.entity.Species>> getSpecies(@Valid SerchByCategorySpeciesVM serchByCategorySpeciesVM) {
+    public ResponseEntity<List<SpeciesDTO>> getSpecies(@Valid SerchByCategorySpeciesVM serchByCategorySpeciesVM) {
 
-        List<com.ali.hunter.domain.entity.Species> species =  speciesService.getSpeciesByCategory(serchByCategorySpeciesVM);
-        return ResponseEntity.ok(species);
+        List<Species> species =  speciesService.getSpeciesByCategory(serchByCategorySpeciesVM);
+        List<SpeciesDTO> speciesDTOList = speciesMapper.toSpeciesDTOList(species);
+        
+        return ResponseEntity.ok(speciesDTOList);
     }
 }
