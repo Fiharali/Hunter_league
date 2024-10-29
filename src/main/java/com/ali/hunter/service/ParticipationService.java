@@ -24,20 +24,20 @@ public class ParticipationService {
     private ParticipationRepository participationRepository;
 
 
-    public Participation registerParticipant(@Valid ParticipationVM requestDTO) {
+    public Participation registerParticipant(@Valid Participation participation) {
 
-        Competition competition = competitionRepository.findById(requestDTO.getCompetitionId())
+        Competition competition = competitionRepository.findById(participation.getCompetition().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Competition not found"));
 
-        User user = userRepository.findById(requestDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = userRepository.findById(participation.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("UserAPI not found"));
 
-        Participation participation = Participation.builder()
+        Participation participation1 = Participation.builder()
                 .user(user)
                 .competition(competition)
                 .score(0.0)
                 .build();
 
-        return participationRepository.save(participation);
+        return participationRepository.save(participation1);
     }
 }

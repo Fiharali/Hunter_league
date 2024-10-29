@@ -12,14 +12,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-public class User {
+public class UserAPI {
 
     private final UserService userService;
 
     @GetMapping("/search")
-    public ResponseEntity<List<com.ali.hunter.domain.entity.User>> searchUsers(@Valid UserSearchVM requestDTO) {
+    public ResponseEntity<List<com.ali.hunter.domain.entity.User>> searchUsers(@Valid UserSearchVM userSearchVM ) {
 
-        List<com.ali.hunter.domain.entity.User> users = userService.searchUsers(requestDTO);
+        List<com.ali.hunter.domain.entity.User> users = userService.searchUsers(userSearchVM);
         return ResponseEntity.ok(users);
     }
 }
