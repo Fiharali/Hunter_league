@@ -35,7 +35,8 @@ public class SpeciesAPI {
     }
 
     @PostMapping
-    public ResponseEntity<SpeciesDTO> addSpecies(@Valid @RequestBody SpeciesVM speciesVM) {
+    public ResponseEntity<SpeciesDTO> addSpecies(
+            @Valid @RequestBody  SpeciesVM speciesVM) {
         Species speciesEntity = speciesVmGetMapper.toSpecies(speciesVM);
         Species species = speciesService.addSpecies(speciesEntity);
         return ResponseEntity.ok(speciesMapper.toSpeciesDTO(species));
