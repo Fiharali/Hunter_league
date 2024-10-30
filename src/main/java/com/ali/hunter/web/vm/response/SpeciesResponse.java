@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class SpeciesResponse {
 
-
     private String name;
 
     private SpeciesType category;

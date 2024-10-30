@@ -5,7 +5,9 @@ import com.ali.hunter.exception.DuplicateResourceException;
 import com.ali.hunter.exception.ResourceNotFoundException;
 import com.ali.hunter.repository.SpeciesRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +17,7 @@ import java.util.UUID;
 public class SpeciesService {
 
     private final SpeciesRepository speciesRepository;
+    private final HuntService huntService;
 
 
     public List<Species> getSpeciesByCategory(Species species) {
@@ -29,11 +32,18 @@ public class SpeciesService {
         return speciesRepository.save(species);
     }
 
+    @Transactional
     public Species deleteSpeciesById(Species species) {
         Species speciesToDelete = speciesRepository.findById(species.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Species with id '" + species.getId() + "' does not exist."));
 
-        speciesRepository.deleteById(species.getId());
+        try {
+            huntService.deleteBySpecies(species.getId());
+            speciesRepository.deleteById(species.getId());
+
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException("Cannot delete species as it is referenced in other records.");
+        }
         return speciesToDelete;
     }
 

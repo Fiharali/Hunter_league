@@ -2,8 +2,6 @@ package com.ali.hunter.web.vm.request;
 
 import com.ali.hunter.domain.enums.Difficulty;
 import com.ali.hunter.domain.enums.SpeciesType;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

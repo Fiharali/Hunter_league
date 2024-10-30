@@ -10,7 +10,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class SpeciesGetResponse {
-
     private UUID id;
     private String name;
     private SpeciesType category;

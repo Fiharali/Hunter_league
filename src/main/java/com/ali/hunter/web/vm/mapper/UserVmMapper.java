@@ -15,6 +15,7 @@ public interface UserVmMapper {
     UserVmMapper INSTANCE = Mappers.getMapper(UserVmMapper.class);
 
     User toUser(UserSearchRequest userSearchRequest);
+
     UserResponse toUserResponse(User user);
     List<UserResponse> toUsersResponceList(List<User> users);
 }
