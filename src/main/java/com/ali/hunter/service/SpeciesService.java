@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +35,18 @@ public class SpeciesService {
 
         speciesRepository.deleteById(species.getId());
         return speciesToDelete;
+    }
+
+    public Species updateSpecies(UUID id, Species updatedSpecies) {
+        Species species = speciesRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Species with id '" + id + "' does not exist."));
+
+        species.setName(updatedSpecies.getName());
+        species.setCategory(updatedSpecies.getCategory());
+        species.setMinimumWeight(updatedSpecies.getMinimumWeight());
+        species.setDifficulty(updatedSpecies.getDifficulty());
+        species.setPoints(updatedSpecies.getPoints());
+
+        return speciesRepository.save(species);
     }
 }

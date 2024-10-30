@@ -48,4 +48,18 @@ public class SpeciesAPI {
         return ResponseEntity.ok(speciesMapperVm.toSpeciesResponse(deletedspecies));
     }
 
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SpeciesResponse> updateSpecies(
+            @PathVariable UUID id,
+            @Valid @RequestBody SpeciesRequest speciesRequest) {
+
+        Species updatedSpecies = speciesMapperVm.toSpecies(speciesRequest);
+
+        Species savedSpecies = speciesService.updateSpecies(id, updatedSpecies);
+
+        SpeciesResponse speciesResponse = speciesMapperVm.toSpeciesResponse(savedSpecies);
+        return ResponseEntity.ok(speciesResponse);
+    }
+
 }
