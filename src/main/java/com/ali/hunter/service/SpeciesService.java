@@ -2,10 +2,8 @@ package com.ali.hunter.service;
 
 import com.ali.hunter.domain.entity.Species;
 import com.ali.hunter.exception.DuplicateResourceException;
+import com.ali.hunter.exception.ResourceNotFoundException;
 import com.ali.hunter.repository.SpeciesRepository;
-import com.ali.hunter.web.vm.SerchByCategorySpeciesVM;
-import com.ali.hunter.web.vm.SpeciesVM;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +26,13 @@ public class SpeciesService {
             throw new DuplicateResourceException("Species with name '" + species.getName() + "' already exists.");
         }
         return speciesRepository.save(species);
+    }
+
+    public Species deleteSpeciesById(Species species) {
+        Species speciesToDelete = speciesRepository.findById(species.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Species with id '" + species.getId() + "' does not exist."));
+
+        speciesRepository.deleteById(species.getId());
+        return speciesToDelete;
     }
 }

@@ -1,4 +1,4 @@
-package com.ali.hunter.web.vm;
+package com.ali.hunter.web.vm.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParticipationVM {
+public class ParticipationRequest {
     @NotNull(message = "User ID cannot be null")
     private UUID userId;
 

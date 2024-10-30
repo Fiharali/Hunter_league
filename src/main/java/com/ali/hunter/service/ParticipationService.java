@@ -8,7 +8,6 @@ import com.ali.hunter.exception.ResourceNotFoundException;
 import com.ali.hunter.repository.CompetitionRepository;
 import com.ali.hunter.repository.ParticipationRepository;
 import com.ali.hunter.repository.UserRepository;
-import com.ali.hunter.web.vm.ParticipationVM;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

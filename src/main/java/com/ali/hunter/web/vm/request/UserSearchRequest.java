@@ -1,4 +1,4 @@
-package com.ali.hunter.web.vm;
+package com.ali.hunter.web.vm.request;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserSearchVM {
+public class UserSearchRequest {
 
     private String firstName;
 

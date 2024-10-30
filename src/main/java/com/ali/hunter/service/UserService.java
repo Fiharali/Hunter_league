@@ -2,7 +2,6 @@ package com.ali.hunter.service;
 
 import com.ali.hunter.domain.entity.User;
 import com.ali.hunter.repository.UserRepository;
-import com.ali.hunter.web.vm.UserSearchVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

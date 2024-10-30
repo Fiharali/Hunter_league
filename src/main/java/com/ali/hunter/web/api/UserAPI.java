@@ -1,20 +1,15 @@
 package com.ali.hunter.web.api;
 
-import com.ali.hunter.domain.entity.Species;
 import com.ali.hunter.domain.entity.User;
-import com.ali.hunter.dto.SpeciesDTO;
-import com.ali.hunter.dto.UserDTO;
-import com.ali.hunter.dto.mapper.UserMapper;
+import com.ali.hunter.web.vm.request.UserSearchRequest;
 import com.ali.hunter.service.UserService;
-import com.ali.hunter.web.vm.UserSearchVM;
-import com.ali.hunter.web.vm.mapper.SpeciesVmMapper;
 import com.ali.hunter.web.vm.mapper.UserVmMapper;
+import com.ali.hunter.web.vm.response.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -24,15 +19,15 @@ public class UserAPI {
 
     private final UserService userService;
     private final UserVmMapper userVmMapper;
-    private final UserMapper userMapper;
+
 
     @GetMapping("/search")
-    public ResponseEntity<List<UserDTO>> searchUsers(@Valid UserSearchVM userSearchVM ) {
+    public ResponseEntity<List<UserResponse>> searchUsers(@Valid UserSearchRequest userSearchRequest) {
 
-        User user = userVmMapper.toUser(userSearchVM);
+        User user = userVmMapper.toUser(userSearchRequest);
         List<User> users = userService.searchUsers(user);
 
-        List<UserDTO> usersDTO = userMapper.toUsersDTOList(users);
+        List<UserResponse> usersDTO = userVmMapper.toUsersResponceList(users);
 
         return ResponseEntity.ok(usersDTO);
     }

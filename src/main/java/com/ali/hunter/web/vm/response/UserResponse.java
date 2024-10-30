@@ -1,14 +1,12 @@
-package com.ali.hunter.dto;
+package com.ali.hunter.web.vm.response;
 
-import com.ali.hunter.domain.entity.Competition;
-import com.ali.hunter.domain.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Getter
 @Setter
-public class UserDTO {
+public class UserResponse {
 
     private String cin;
 

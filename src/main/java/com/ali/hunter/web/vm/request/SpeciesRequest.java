@@ -1,4 +1,4 @@
-package com.ali.hunter.web.vm;
+package com.ali.hunter.web.vm.request;
 
 import com.ali.hunter.domain.enums.Difficulty;
 import com.ali.hunter.domain.enums.SpeciesType;
@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SpeciesVM {
+public class SpeciesRequest {
 
     @NotNull(message = "you must enter the name of the species")
     private String name;
