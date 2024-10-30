@@ -1,6 +1,7 @@
 package com.ali.hunter.service;
 
 import com.ali.hunter.domain.entity.Species;
+import com.ali.hunter.exception.DuplicateResourceException;
 import com.ali.hunter.repository.SpeciesRepository;
 import com.ali.hunter.web.vm.SerchByCategorySpeciesVM;
 import com.ali.hunter.web.vm.SpeciesVM;
@@ -23,6 +24,9 @@ public class SpeciesService {
 
 
     public Species addSpecies(Species species) {
+        if (speciesRepository.existsByName(species.getName())) {
+            throw new DuplicateResourceException("Species with name '" + species.getName() + "' already exists.");
+        }
         return speciesRepository.save(species);
     }
 }

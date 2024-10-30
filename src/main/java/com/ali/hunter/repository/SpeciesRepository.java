@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface SpeciesRepository extends JpaRepository<Species, UUID> {
 
     List<Species> findByCategory(SpeciesType category);
+
+    boolean existsByName(String name);
 }
