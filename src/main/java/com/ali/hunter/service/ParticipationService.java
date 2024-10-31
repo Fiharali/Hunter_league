@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ParticipationService {
 
@@ -38,5 +40,13 @@ public class ParticipationService {
                 .build();
 
         return participationRepository.save(participation1);
+    }
+
+    public Participation getParticipationByCompetitionId(UUID id) {
+        return participationRepository.findByCompetitionId(id);
+    }
+
+    public Integer countByCompetitionId(UUID id) {
+        return participationRepository.countByCompetitionId(id);
     }
 }

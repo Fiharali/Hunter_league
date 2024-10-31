@@ -4,6 +4,8 @@ import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.web.vm.request.CompetitionRequest;
 import com.ali.hunter.web.vm.response.CompetitionResponse;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.util.List;
 
@@ -14,5 +16,8 @@ public interface CompetitionVmMapper {
 
     CompetitionResponse toCompetitionResponse(Competition competition);
 
-    List<CompetitionResponse> toCompetitionResponseList(List<Competition> competitionList);
+    List<CompetitionResponse> toCompetitionResponse(List<Competition> competitions);
+
+
+
 }
