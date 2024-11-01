@@ -1,9 +1,6 @@
 package com.ali.hunter.exception;
 
-import com.ali.hunter.exception.exps.DuplicateResourceException;
-import com.ali.hunter.exception.exps.LicenseExpirationDateException;
-import com.ali.hunter.exception.exps.MaxParticipantsException;
-import com.ali.hunter.exception.exps.ResourceNotFoundException;
+import com.ali.hunter.exception.exps.*;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +60,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MaxParticipantsException.class)
     public ResponseEntity<Map<String, String>> handleLicenseExpirationDateException(MaxParticipantsException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(CompetitionAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleCompetitionAlreadyExistsExceptionException(CompetitionAlreadyExistsException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
