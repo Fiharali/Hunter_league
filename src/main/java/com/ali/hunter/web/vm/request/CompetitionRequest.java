@@ -2,6 +2,7 @@ package com.ali.hunter.web.vm.request;
 
 
 import com.ali.hunter.domain.enums.SpeciesType;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,5 +34,14 @@ public class CompetitionRequest {
 
     @NotNull(message = "you must enter the openRegistration of the competition")
     private Boolean openRegistration;
+
+
+    @AssertTrue(message = "maxParticipants must be greater than minParticipants")
+    public boolean isMaxGreaterThanMin() {
+        if (minParticipants == null || maxParticipants == null) {
+            return true;
+        }
+        return maxParticipants > minParticipants;
+    }
 
 }
