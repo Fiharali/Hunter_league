@@ -3,6 +3,7 @@ package com.ali.hunter.service;
 
 import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.repository.CompetitionRepository;
+import com.ali.hunter.repository.dto.CompetitionRepoDTO;
 import com.ali.hunter.service.dto.CompetitionDTO;
 import com.ali.hunter.service.dto.mapper.CompetitionDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,8 @@ public class CompetitionService {
     }
 
     public  Page<CompetitionDTO> getAllCompetition(Pageable pageable) {
-        Page<Competition> competitionPage = competitionRepository.findAll(pageable);
+        Page<CompetitionRepoDTO> competitionPage = competitionRepository.findAllRepoDTO(pageable);
         List<CompetitionDTO> competitionDTOS = competitionDTOMapper.toCompetitionDTO(competitionPage.getContent());
-        competitionDTOS.forEach(competitionDTO -> {
-            int participationCount = participationService.countByCompetitionId(competitionDTO.getId());
-            competitionDTO.setParticipationCount(participationCount);
-        });
         return new PageImpl<>(competitionDTOS, pageable, competitionPage.getTotalElements());
 
     }

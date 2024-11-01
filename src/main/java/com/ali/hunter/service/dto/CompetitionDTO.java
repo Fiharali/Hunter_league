@@ -16,5 +16,5 @@ public class CompetitionDTO {
 
     private LocalDateTime date;
 
-    private Integer participationCount;
+    private Integer participationCount = 0;
 }

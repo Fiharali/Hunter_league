@@ -1,6 +1,7 @@
 package com.ali.hunter.service.dto.mapper;
 
 import com.ali.hunter.domain.entity.Competition;
+import com.ali.hunter.repository.dto.CompetitionRepoDTO;
 import com.ali.hunter.service.dto.CompetitionDTO;
 import org.mapstruct.Mapper;
 
@@ -11,7 +12,5 @@ public interface CompetitionDTOMapper {
 
     CompetitionDTO toCompetitionDTO(Competition competition);
 
-    List<CompetitionDTO> toCompetitionDTO(List<Competition> competitions);
-
-
+    List<CompetitionDTO> toCompetitionDTO(List<CompetitionRepoDTO> content);
 }
