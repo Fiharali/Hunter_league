@@ -10,6 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 public class UserSearchRequest {
 
+    private String cin;
+
     private String firstName;
 
     private String lastName;

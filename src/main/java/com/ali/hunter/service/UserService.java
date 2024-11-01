@@ -18,9 +18,10 @@ public class UserService {
     public Page<User> searchUsers(User user , Pageable pageable) {
         if (user.getFirstName() == null  &&
                 user.getLastName() == null &&
+                user.getCin() == null &&
                 user.getEmail() == null ) {
             return userRepository.findAll(pageable);
         }
-        return  userRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(user.getFirstName(), user.getLastName(), user.getEmail() , pageable);
+        return  userRepository.findByCinContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase( user.getCin() ,user.getFirstName(), user.getLastName(), user.getEmail()  , pageable);
     }
 }

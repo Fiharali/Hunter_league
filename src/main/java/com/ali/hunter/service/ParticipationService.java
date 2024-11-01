@@ -4,7 +4,8 @@ import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.domain.entity.Participation;
 import com.ali.hunter.domain.entity.User;
 
-import com.ali.hunter.exception.ResourceNotFoundException;
+import com.ali.hunter.exception.exps.LicenseExpirationDateException;
+import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import com.ali.hunter.repository.CompetitionRepository;
 import com.ali.hunter.repository.ParticipationRepository;
 import com.ali.hunter.repository.UserRepository;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -33,6 +35,10 @@ public class ParticipationService {
         User user = userRepository.findById(participation.getUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+
+        if (user.getLicenseExpirationDate().isBefore(LocalDateTime.now())){
+            throw new LicenseExpirationDateException("User license is expired");
+        }
         Participation participation1 = Participation.builder()
                 .user(user)
                 .competition(competition)

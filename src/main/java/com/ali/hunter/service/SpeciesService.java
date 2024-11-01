@@ -1,8 +1,8 @@
 package com.ali.hunter.service;
 
 import com.ali.hunter.domain.entity.Species;
-import com.ali.hunter.exception.DuplicateResourceException;
-import com.ali.hunter.exception.ResourceNotFoundException;
+import com.ali.hunter.exception.exps.DuplicateResourceException;
+import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import com.ali.hunter.repository.SpeciesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
