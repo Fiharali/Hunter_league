@@ -5,6 +5,7 @@ import com.ali.hunter.domain.entity.Participation;
 import com.ali.hunter.domain.entity.User;
 
 import com.ali.hunter.exception.exps.LicenseExpirationDateException;
+import com.ali.hunter.exception.exps.MaxParticipantsException;
 import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import com.ali.hunter.repository.CompetitionRepository;
 import com.ali.hunter.repository.ParticipationRepository;
@@ -39,6 +40,10 @@ public class ParticipationService {
         if (user.getLicenseExpirationDate().isBefore(LocalDateTime.now())){
             throw new LicenseExpirationDateException("User license is expired");
         }
+
+        if (competition.getParticipations().size() < competition.getMaxParticipants()) {
+            throw new MaxParticipantsException("Max participants reached");
+        }
         Participation participation1 = Participation.builder()
                 .user(user)
                 .competition(competition)
@@ -48,11 +53,5 @@ public class ParticipationService {
         return participationRepository.save(participation1);
     }
 
-    public Participation getParticipationByCompetitionId(UUID id) {
-        return participationRepository.findByCompetitionId(id);
-    }
 
-    public Integer countByCompetitionId(UUID id) {
-        return participationRepository.countByCompetitionId(id);
-    }
 }

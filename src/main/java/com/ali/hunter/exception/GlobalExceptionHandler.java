@@ -1,6 +1,8 @@
 package com.ali.hunter.exception;
 
 import com.ali.hunter.exception.exps.DuplicateResourceException;
+import com.ali.hunter.exception.exps.LicenseExpirationDateException;
+import com.ali.hunter.exception.exps.MaxParticipantsException;
 import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -52,12 +54,27 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(LicenseExpirationDateException.class)
+    public ResponseEntity<Map<String, String>> handleLicenseExpirationDateException(LicenseExpirationDateException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(MaxParticipantsException.class)
+    public ResponseEntity<Map<String, String>> handleLicenseExpirationDateException(MaxParticipantsException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<Map<String, String>> handleDuplicateResourceException(DuplicateResourceException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
+
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<Map<String, String>> handleDuplicateResourceException(IllegalStateException ex) {
         Map<String, String> error = new HashMap<>();
