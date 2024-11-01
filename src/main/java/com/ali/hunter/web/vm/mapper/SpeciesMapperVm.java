@@ -5,6 +5,7 @@ import com.ali.hunter.web.vm.request.SerchByCategorySpeciesRequest;
 import com.ali.hunter.web.vm.request.SpeciesRequest;
 import com.ali.hunter.web.vm.response.SpeciesResponse;
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface SpeciesMapperVm {
 
     SpeciesResponse toSpeciesResponse(Species species);
 
-    List<SpeciesResponse> toSpeciesResponseList(List<Species> speciesList);
+    List<SpeciesResponse> toSpeciesResponseList(Page<Species> speciesList);
 
 
 

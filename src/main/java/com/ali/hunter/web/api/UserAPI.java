@@ -27,10 +27,11 @@ public class UserAPI {
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> searchUsers(@Valid UserSearchRequest userSearchRequest ,
-                                                          @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "10") int size) {
+     @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size
+    ) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("cin").ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("nationality").ascending());
         User user = userVmMapper.toUser(userSearchRequest);
         Page<User> users = userService.searchUsers(user,pageable);
 

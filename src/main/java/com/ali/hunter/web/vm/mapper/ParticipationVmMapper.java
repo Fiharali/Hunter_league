@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 public interface ParticipationVmMapper {
 
     ParticipationVmMapper INSTANCE = Mappers.getMapper(ParticipationVmMapper.class);
-    @Mapping(target = "id", ignore = true)
+
     @Mapping(target = "user.id", source = "userId")
     @Mapping(target = "competition.id", source = "competitionId")
     Participation toParticipation(ParticipationRequest participationRequest);

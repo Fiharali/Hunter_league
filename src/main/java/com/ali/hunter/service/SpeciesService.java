@@ -6,6 +6,8 @@ import com.ali.hunter.exception.ResourceNotFoundException;
 import com.ali.hunter.repository.SpeciesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,11 @@ public class SpeciesService {
     private final HuntService huntService;
 
 
-    public List<Species> getSpeciesByCategory(Species species) {
-        return speciesRepository.findByCategory(species.getCategory());
+    public Page<Species> getSpeciesByCategory(Species species , Pageable pageable) {
+        if (species.getCategory() == null){
+            return speciesRepository.findAll(pageable);
+        }
+        return speciesRepository.findByCategory(species.getCategory(),pageable);
     }
 
 

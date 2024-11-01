@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserVmMapper {
 
-    UserVmMapper INSTANCE = Mappers.getMapper(UserVmMapper.class);
+
 
     User toUser(UserSearchRequest userSearchRequest);
 

@@ -9,6 +9,10 @@ import com.ali.hunter.web.vm.request.SerchByCategorySpeciesRequest;
 import com.ali.hunter.web.vm.mapper.SpeciesMapperVm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +28,13 @@ public class SpeciesAPI {
     private final SpeciesMapperVm speciesMapperVm;
 
     @GetMapping
-    public ResponseEntity<List<SpeciesResponse>> getSpecies(@Valid SerchByCategorySpeciesRequest serchByCategorySpeciesRequest) {
+    public ResponseEntity<List<SpeciesResponse>> getSpecies(@Valid SerchByCategorySpeciesRequest serchByCategorySpeciesRequest,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("points").ascending());
 
         Species speciesEntity = speciesMapperVm.toSpecies(serchByCategorySpeciesRequest);
-        List<Species> species =  speciesService.getSpeciesByCategory(speciesEntity);
+        Page<Species> species =  speciesService.getSpeciesByCategory(speciesEntity,pageable);
         List<SpeciesResponse> speciesResponseList = speciesMapperVm.toSpeciesResponseList(species);
         return ResponseEntity.ok(speciesResponseList);
     }
