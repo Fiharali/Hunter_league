@@ -19,7 +19,7 @@ public class CompetitionResponse {
 
     private LocalDateTime date;
 
-    private List<Participation> participations;
+    private Integer participationCount = 0;
 
 
 

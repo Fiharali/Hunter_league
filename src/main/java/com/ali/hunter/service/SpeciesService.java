@@ -36,11 +36,9 @@ public class SpeciesService {
     public Species deleteSpeciesById(Species species) {
         Species speciesToDelete = speciesRepository.findById(species.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Species with id '" + species.getId() + "' does not exist."));
-
         try {
             huntService.deleteBySpecies(species.getId());
             speciesRepository.deleteById(species.getId());
-
         } catch (DataIntegrityViolationException e) {
             throw new IllegalStateException("Cannot delete species as it is referenced in other records.");
         }

@@ -1,8 +1,7 @@
-package com.ali.hunter.service.dto.mapper;
+package com.ali.hunter.repository.dto.mapper;
 
 import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.repository.dto.CompetitionRepoDTO;
-import com.ali.hunter.service.dto.CompetitionDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CompetitionDTOMapper {
 
-    CompetitionDTO toCompetitionDTO(Competition competition);
+    CompetitionRepoDTO toCompetitionDTO(Competition competition);
 
-    List<CompetitionDTO> toCompetitionDTO(List<CompetitionRepoDTO> content);
+    List<CompetitionRepoDTO> toCompetitionDTO(List<CompetitionRepoDTO> content);
 }

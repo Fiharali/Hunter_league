@@ -3,6 +3,8 @@ package com.ali.hunter.service;
 import com.ali.hunter.domain.entity.User;
 import com.ali.hunter.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +15,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public List<User> searchUsers(User user) {
-        return userRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(user.getFirstName(), user.getLastName(), user.getEmail());
+    public Page<User> searchUsers(User user , Pageable pageable) {
+        if (user.getFirstName() == null  &&
+                user.getLastName() == null &&
+                user.getEmail() == null ) {
+            return userRepository.findAll(pageable);
+        }
+        return  userRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(user.getFirstName(), user.getLastName(), user.getEmail() , pageable);
     }
 }

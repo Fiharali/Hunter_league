@@ -29,9 +29,7 @@ public class ParticipationAPI {
         Participation participation = participationVmMapper.toParticipation(participationRequest);
 
         Participation savedParticipation = participationService.registerParticipant(participation);
-
         ParticipationResponse participationResponse = participationVmMapper.toParticipationResponse(savedParticipation);
-
         return ResponseEntity.ok(participationResponse);
     }
 }

@@ -7,6 +7,10 @@ import com.ali.hunter.web.vm.mapper.UserVmMapper;
 import com.ali.hunter.web.vm.response.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +25,14 @@ public class UserAPI {
     private final UserVmMapper userVmMapper;
 
 
-    @GetMapping("/search")
-    public ResponseEntity<List<UserResponse>> searchUsers(@Valid UserSearchRequest userSearchRequest) {
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> searchUsers(@Valid UserSearchRequest userSearchRequest ,
+                                                          @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size) {
 
+        Pageable pageable = PageRequest.of(page, size, Sort.by("cin").ascending());
         User user = userVmMapper.toUser(userSearchRequest);
-        List<User> users = userService.searchUsers(user);
+        Page<User> users = userService.searchUsers(user,pageable);
 
         List<UserResponse> usersDTO = userVmMapper.toUsersResponceList(users);
 

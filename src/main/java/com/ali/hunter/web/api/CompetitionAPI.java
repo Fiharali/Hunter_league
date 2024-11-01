@@ -2,8 +2,8 @@ package com.ali.hunter.web.api;
 
 import com.ali.hunter.domain.entity.Competition;
 
+import com.ali.hunter.repository.dto.CompetitionRepoDTO;
 import com.ali.hunter.service.CompetitionService;
-import com.ali.hunter.service.dto.CompetitionDTO;
 import com.ali.hunter.web.vm.mapper.CompetitionVmMapper;
 import com.ali.hunter.web.vm.request.CompetitionRequest;
 import com.ali.hunter.web.vm.response.CompetitionResponse;
@@ -26,22 +26,21 @@ public class CompetitionAPI {
 
 
 
-    @PostMapping
-    public ResponseEntity<CompetitionResponse> addCompetition(
-            @Valid @RequestBody CompetitionRequest competitionRequest) {
+        @PostMapping
+        public ResponseEntity<CompetitionResponse> addCompetition(
+                @Valid @RequestBody CompetitionRequest competitionRequest) {
 
-        Competition competitionEntity = competitionVmMapper.toCompetition(competitionRequest);
-        Competition competition = competitionService.addCompetition(competitionEntity);
+            Competition competitionEntity = competitionVmMapper.toCompetition(competitionRequest);
+            Competition competition = competitionService.addCompetition(competitionEntity);
 
-        return ResponseEntity.ok(competitionVmMapper.toCompetitionResponse(competition));
-    }
+            return ResponseEntity.ok(competitionVmMapper.toCompetitionResponse(competition));
+        }
 
     @GetMapping
-    public ResponseEntity<Page<CompetitionDTO>> getCompetitions(  @RequestParam(defaultValue = "0") int page,
-                                                                  @RequestParam(defaultValue = "10") int size) {
-
+    public ResponseEntity<Page<CompetitionRepoDTO>> getCompetitions(@RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<CompetitionDTO> competitionDTOs = competitionService.getAllCompetition(pageable);
+        Page<CompetitionRepoDTO> competitionDTOs = competitionService.getAllCompetition(pageable);
         return ResponseEntity.ok(competitionDTOs);
     }
 }
