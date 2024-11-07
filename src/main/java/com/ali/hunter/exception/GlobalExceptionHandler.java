@@ -1,9 +1,11 @@
 package com.ali.hunter.exception;
 
 import com.ali.hunter.exception.exps.*;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -65,6 +67,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(RegistrationClosedException.class)
+    public ResponseEntity<Map<String, String>> handleRegistrationClosedException(RegistrationClosedException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(CompetitionAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleCompetitionAlreadyExistsExceptionException(CompetitionAlreadyExistsException ex) {
         Map<String, String> error = new HashMap<>();
@@ -86,5 +95,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
+
+    @ExceptionHandler(EmailAlreadyExisteException.class)
+    public ResponseEntity<Map<String, String>> handleEmailAlreadyExisteException(EmailAlreadyExisteException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ResponseEntity<String> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+//        Throwable cause = ex.getCause();
+//        if (cause instanceof InvalidFormatException) {
+//            InvalidFormatException formatException = (InvalidFormatException) cause;
+//            if (formatException.getTargetType().isEnum()) {
+//                return ResponseEntity.badRequest().body("Invalid role value provided. Accepted values are: JURY, ADMIN, MEMBER.");
+//            }
+//        }
+//        return ResponseEntity.badRequest().body("Invalid request format.");
+//    }
 
 }
