@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -50,6 +51,18 @@ public class UserAPI {
             @Valid @RequestBody UserRequest userRequest) {
         User userEntity = userVmMapper.toUser(userRequest);
         User user = userService.addSUser(userEntity);
+        return ResponseEntity.ok(userVmMapper.toUserResponse(user));
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable UUID id,
+            @Valid @RequestBody UserRequest userRequest) {
+
+        User userEntity = userVmMapper.toUser(userRequest);
+
+        User user = userService.updateUser(id, userEntity);
         return ResponseEntity.ok(userVmMapper.toUserResponse(user));
     }
 }
