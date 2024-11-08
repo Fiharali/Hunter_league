@@ -2,6 +2,7 @@ package com.ali.hunter.service;
 
 
 import com.ali.hunter.domain.entity.Competition;
+import com.ali.hunter.domain.entity.User;
 import com.ali.hunter.exception.exps.CompetitionAlreadyExistsException;
 import com.ali.hunter.repository.CompetitionRepository;
 import com.ali.hunter.repository.dto.CompetitionRepoDTO;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -50,5 +52,10 @@ public class CompetitionService {
         Page<CompetitionRepoDTO> competitionPage = competitionRepository.findAllRepoDTO(pageable);
         List<CompetitionRepoDTO> competitionDTOS = competitionDTOMapper.toCompetitionDTO(competitionPage.getContent());
         return new PageImpl<>(competitionDTOS, pageable, competitionPage.getTotalElements());
+    }
+
+
+    public Optional<Competition> findById(UUID id) {
+        return competitionRepository.findById(id);
     }
 }

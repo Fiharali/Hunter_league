@@ -14,27 +14,31 @@ import com.ali.hunter.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class ParticipationService {
 
     @Autowired
-    private CompetitionRepository competitionRepository;
+    private CompetitionService competitionService;
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userService;
     @Autowired
     private ParticipationRepository participationRepository;
+    @Autowired
+    private HuntService huntService;
 
 
     public Participation registerParticipant(@Valid Participation participation) {
 
-        Competition competition = competitionRepository.findById(participation.getCompetition().getId())
+        Competition competition = competitionService.findById(participation.getCompetition().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Competition not found"));
 
-        User user = userRepository.findById(participation.getUser().getId())
+        User user = userService.findById(participation.getUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
 
@@ -59,5 +63,15 @@ public class ParticipationService {
         return participationRepository.save(participation1);
     }
 
+    @Transactional
+    public void deleteParticipationsByUser(User userToDelete) {
 
+        List<Participation> participations = participationRepository.findByUser(userToDelete);
+
+        for (Participation participation : participations) {
+            huntService.deleteHuntsByParticipation(participation);
+            participationRepository.delete(participation);
+        }
+
+    }
 }

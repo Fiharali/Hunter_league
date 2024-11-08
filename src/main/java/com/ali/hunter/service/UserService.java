@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,6 +21,8 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ParticipationService participationService;
+
 
     public Page<User> searchUsers(User user , Pageable pageable) {
         if (user.getFirstName() == null  &&
@@ -67,5 +71,19 @@ public class UserService {
 
         return userRepository.save(userToUpdate);
 
+    }
+
+    @Transactional
+    public User deleteUser(User user) {
+        User userToDelete = userRepository.findById(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        participationService.deleteParticipationsByUser(userToDelete);
+        userRepository.delete(userToDelete);
+        return userToDelete;
+    }
+
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
     }
 }

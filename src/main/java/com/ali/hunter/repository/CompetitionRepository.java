@@ -1,6 +1,7 @@
 package com.ali.hunter.repository;
 
 import com.ali.hunter.domain.entity.Competition;
+import com.ali.hunter.domain.entity.User;
 import com.ali.hunter.repository.dto.CompetitionRepoDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,5 +29,8 @@ public interface CompetitionRepository extends JpaRepository<Competition, UUID> 
     @Query("SELECT c FROM Competition c WHERE c.date BETWEEN :startOfWeek AND :endOfWeek")
     Optional<Competition> findCompetitionByDateRange(@Param("startOfWeek") LocalDateTime startOfWeek,
                                                      @Param("endOfWeek") LocalDateTime endOfWeek);
+
+
+
 
 }

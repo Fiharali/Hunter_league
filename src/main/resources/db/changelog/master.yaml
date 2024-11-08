@@ -7,10 +7,24 @@ databaseChangeLog:
       file: db/changelog/2024/10/22-01-changelog.yaml
   - include:
       file: db/changelog/2024/10/22-02-changelog.yaml
- # - include:
-  #    file: db/changelog/2024/11/01-01-changelog.yaml
+  - include:
+      file: db/changelog/2024/11/01-01-changelog.yaml
   - include:
       file: db/changelog/2024/11/01-02-changelog.yaml
+  - include:
+      file: db/changelog/2024/11/07-01-changelog.yaml
+  - include:
+      file: db/changelog/2024/11/07-02-changelog.yaml
+  - include:
+      file: db/changelog/2024/11/07-03-changelog.yaml
+  - include:
+      file: db/changelog/2024/11/07-04-changelog.yaml
+  - include:
+      file: db/changelog/2024/11/07-05-changelog.yaml
+  - include:
+      file: db/changelog/2024/11/07-06-changelog.yaml
+  - include:
+      file: db/changelog/2024/11/07-07-changelog.yaml
 
 
 

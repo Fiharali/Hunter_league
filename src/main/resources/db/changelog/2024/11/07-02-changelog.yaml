@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1730610899-1
+      author: youcode
+      changes:
+        - createIndex:
+            indexName: idx_hunt
+            tableName: hunt
+            columns:
+              - column:
+                  name: id

@@ -4,7 +4,7 @@ databaseChangeLog:
            author: youcode
            changes:
              - createIndex:
-                 indexName: idx_hunt_species_id
+                 indexName: hunt_species_id
                  tableName: hunt
                  columns:
                    - column:

@@ -65,4 +65,12 @@ public class UserAPI {
         User user = userService.updateUser(id, userEntity);
         return ResponseEntity.ok(userVmMapper.toUserResponse(user));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserResponse> deleteSpeciesById(@PathVariable UUID id) {
+        User user = new User();
+        user.setId(id);
+        User deletedUser = userService.deleteUser(user);
+        return ResponseEntity.ok(userVmMapper.toUserResponse(deletedUser));
+    }
 }

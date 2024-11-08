@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1730750899-1
+      author: youcode
+      changes:
+        - createIndex:
+            indexName: idx_participation_user_id
+            tableName: participation
+            columns:
+              - column:
+                  name: user_id
