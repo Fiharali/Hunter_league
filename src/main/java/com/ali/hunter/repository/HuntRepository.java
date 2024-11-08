@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface HuntRepository extends JpaRepository<Hunt, UUID> {
@@ -18,4 +19,8 @@ public interface HuntRepository extends JpaRepository<Hunt, UUID> {
     void deleteBySpeciesId(@Param("speciesId") UUID speciesId);
 
     void deleteHuntsByParticipation(Participation participation);
+
+    @Modifying
+    @Query("DELETE FROM Hunt h WHERE h.participation IN :participations")
+    void deleteByParticipations(@Param("participations") List<Participation> participations);
 }

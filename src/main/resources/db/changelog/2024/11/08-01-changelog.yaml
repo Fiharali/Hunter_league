@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1731077462
+      author: abdelali
+      changes:
+        - createProcedure:
+            procedureName: delete_user_with_related_data3
+            procedureBody: |
+              CREATE OR REPLACE PROCEDURE delete_user_with_related_data3(IN userId UUID)
+              LANGUAGE plpgsql
+              AS $$
+              DECLARE
+                  batchSize INT := 1000;
+              BEGIN
+                  -- Delete hunts in batches
+                  LOOP
+                      WITH rows_to_delete AS (
+                          SELECT h.id
+                          FROM hunt h
+                          JOIN participation p ON h.participation_id = p.id
+                          WHERE p.user_id = userId
+                          LIMIT batchSize
+                          FOR UPDATE
+                      )
+                      DELETE FROM hunt
+                      WHERE id IN (SELECT id FROM rows_to_delete);
+
+                      EXIT WHEN NOT FOUND;  -- Exit if no more rows are found
+                  END LOOP;
+
+                  -- Delete participations in batches
+                  LOOP
+                      WITH rows_to_delete AS (
+                          SELECT id
+                          FROM participation
+                          WHERE user_id = userId
+                          LIMIT batchSize
+                          FOR UPDATE
+                      )
+                      DELETE FROM participation
+                      WHERE id IN (SELECT id FROM rows_to_delete);
+
+                      EXIT WHEN NOT FOUND;  -- Exit if no more rows are found
+                  END LOOP;
+
+                  -- Delete the user
+                  DELETE FROM "user" WHERE id = userId;
+              END;
+              $$;

@@ -4,6 +4,7 @@ import com.ali.hunter.domain.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.query.Procedure;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Page<User> findAll(Pageable pageable);
 
     Optional<User> findByEmail(String email);
+
+    @Procedure(procedureName = "delete_user_with_related_data3")
+    void deleteUserWithRelatedData(UUID id);
 }

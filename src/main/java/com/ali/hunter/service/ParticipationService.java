@@ -72,6 +72,5 @@ public class ParticipationService {
             huntService.deleteHuntsByParticipation(participation);
             participationRepository.delete(participation);
         }
-
     }
 }

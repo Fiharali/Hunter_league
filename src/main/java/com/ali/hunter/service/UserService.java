@@ -2,6 +2,7 @@ package com.ali.hunter.service;
 
 import com.ali.hunter.domain.entity.User;
 import com.ali.hunter.exception.exps.EmailAlreadyExisteException;
+import com.ali.hunter.exception.exps.InvalidPasswordException;
 import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import com.ali.hunter.repository.UserRepository;
 import com.ali.hunter.utils.PasswordUtil;
@@ -78,12 +79,24 @@ public class UserService {
         User userToDelete = userRepository.findById(user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        participationService.deleteParticipationsByUser(userToDelete);
+       participationService.deleteParticipationsByUser(userToDelete);
         userRepository.delete(userToDelete);
+        //userRepository.deleteUserWithRelatedData(user.getId());
         return userToDelete;
     }
 
     public Optional<User> findById(UUID id) {
         return userRepository.findById(id);
+    }
+
+    public User login(User user) {
+        User userEntity = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("this email does not exist"));
+
+        if (!PasswordUtil.checkPassword(user.getPassword(), userEntity.getPassword())) {
+            throw new InvalidPasswordException("this password does not match ");
+        }
+
+        return userEntity;
     }
 }
