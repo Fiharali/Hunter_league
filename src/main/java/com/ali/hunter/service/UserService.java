@@ -7,6 +7,8 @@ import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import com.ali.hunter.repository.UserRepository;
 import com.ali.hunter.utils.PasswordUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,16 @@ public class UserService {
                 user.getEmail() == null ) {
             return userRepository.findAll(pageable);
         }
-        return  userRepository.findByCinContainingIgnoreCaseOrEmailContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase( user.getCin() ,user.getFirstName(), user.getLastName(), user.getEmail()  , pageable);
+
+        ExampleMatcher matcher = ExampleMatcher.matchingAll()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<User> example = Example.of(user, matcher);
+
+        return userRepository.findAll(example, pageable);
+
+
     }
 
 
