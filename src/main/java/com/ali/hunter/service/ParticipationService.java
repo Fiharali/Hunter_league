@@ -2,6 +2,7 @@ package com.ali.hunter.service;
 
 import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.domain.entity.Participation;
+import com.ali.hunter.domain.entity.Species;
 import com.ali.hunter.domain.entity.User;
 
 import com.ali.hunter.exception.exps.LicenseExpirationDateException;
@@ -12,7 +13,9 @@ import com.ali.hunter.repository.CompetitionRepository;
 import com.ali.hunter.repository.ParticipationRepository;
 import com.ali.hunter.repository.UserRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,7 @@ public class ParticipationService {
     @Autowired
     private ParticipationRepository participationRepository;
     @Autowired
+    @Lazy
     private HuntService huntService;
 
 
@@ -72,5 +76,17 @@ public class ParticipationService {
             huntService.deleteHuntsByParticipation(participation);
             participationRepository.delete(participation);
         }
+    }
+
+    public Participation findById( UUID participationId) {
+        return participationRepository.findById(participationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Species with id '" + participationId + "' does not exist."));
+    }
+
+
+    public void updateScore(Participation participation, Species species, Double weight) {
+
+        participation.setScore(weight + (weight * species.getDifficulty().getValue()) + species.getPoints());
+        participationRepository.save(participation);
     }
 }

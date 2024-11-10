@@ -4,7 +4,9 @@ import com.ali.hunter.domain.entity.Species;
 import com.ali.hunter.exception.exps.DuplicateResourceException;
 import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import com.ali.hunter.repository.SpeciesRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import java.util.UUID;
 public class SpeciesService {
 
     private final SpeciesRepository speciesRepository;
+
     private final HuntService huntService;
 
 
@@ -60,5 +63,10 @@ public class SpeciesService {
         species.setPoints(updatedSpecies.getPoints());
 
         return speciesRepository.save(species);
+    }
+
+    public Species findById( UUID speciesId) {
+        return speciesRepository.findById(speciesId)
+                .orElseThrow(() -> new ResourceNotFoundException("Species with id '" + speciesId + "' does not exist."));
     }
 }
