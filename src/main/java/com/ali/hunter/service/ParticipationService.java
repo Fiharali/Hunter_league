@@ -1,19 +1,14 @@
 package com.ali.hunter.service;
 
-import com.ali.hunter.domain.entity.Competition;
-import com.ali.hunter.domain.entity.Participation;
-import com.ali.hunter.domain.entity.Species;
-import com.ali.hunter.domain.entity.User;
+import com.ali.hunter.domain.entity.*;
 
 import com.ali.hunter.exception.exps.LicenseExpirationDateException;
 import com.ali.hunter.exception.exps.MaxParticipantsException;
 import com.ali.hunter.exception.exps.RegistrationClosedException;
 import com.ali.hunter.exception.exps.ResourceNotFoundException;
-import com.ali.hunter.repository.CompetitionRepository;
 import com.ali.hunter.repository.ParticipationRepository;
 import com.ali.hunter.repository.UserRepository;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -84,9 +79,24 @@ public class ParticipationService {
     }
 
 
-    public void updateScore(Participation participation, Species species, Double weight) {
+    public double updateScore(Participation participation) {
 
-        participation.setScore(weight + (weight * species.getDifficulty().getValue()) + species.getPoints());
+        List<Hunt> hunts = huntService.findByParticipation(participation);
+        double totalScore = 0.0;
+
+        for (Hunt hunt : hunts) {
+            Species species = hunt.getSpecies();
+            double weight = hunt.getWeight();
+            totalScore += weight + (weight * species.getDifficulty().getValue()) + species.getPoints();
+        }
+
+        participation.setScore(totalScore);
+        participationRepository.save(participation);
+
+        return totalScore;
+    }
+
+    public void save(Participation participation) {
         participationRepository.save(participation);
     }
 }

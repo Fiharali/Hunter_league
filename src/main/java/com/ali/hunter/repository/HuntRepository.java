@@ -23,4 +23,7 @@ public interface HuntRepository extends JpaRepository<Hunt, UUID> {
     @Modifying
     @Query("DELETE FROM Hunt h WHERE h.participation IN :participations")
     void deleteByParticipations(@Param("participations") List<Participation> participations);
+
+    List<Hunt> findByParticipation(Participation participation);
+
 }

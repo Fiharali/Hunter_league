@@ -4,11 +4,7 @@ package com.ali.hunter.service;
 import com.ali.hunter.domain.entity.Hunt;
 import com.ali.hunter.domain.entity.Participation;
 import com.ali.hunter.domain.entity.Species;
-import com.ali.hunter.exception.exps.ResourceNotFoundException;
-import com.ali.hunter.repository.CompetitionRepository;
 import com.ali.hunter.repository.HuntRepository;
-import com.ali.hunter.repository.ParticipationRepository;
-import com.ali.hunter.repository.SpeciesRepository;
 import com.ali.hunter.web.vm.request.HuntRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -16,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,10 +21,11 @@ public class HuntService {
     private HuntRepository huntRepository;
 
     @Autowired
-    private ParticipationRepository participationRepository;
+    private ParticipationService participationService;
 
     @Autowired
-    private SpeciesRepository speciesRepository;
+    @Lazy
+    private SpeciesService speciesService;
 
     @Transactional
     public void deleteBySpecies(UUID id) {
@@ -44,24 +40,23 @@ public class HuntService {
         huntRepository.deleteByParticipations(participations);
     }
 
-    public void registerHunt(HuntRequest huntRequest) {
+    public double registerHunt(HuntRequest huntRequest) {
 
-       Optional<Participation> participation = Optional.ofNullable(participationRepository.findById(huntRequest.getParticipationId()).orElseThrow(() -> new ResourceNotFoundException("Participation not found")));
-       Optional<Species> species = Optional.ofNullable(speciesRepository.findById(huntRequest.getSpeciesId()).orElseThrow(() -> new ResourceNotFoundException("Species not found")));
+       Participation participation = participationService.findById(huntRequest.getParticipationId());
+       Species species = speciesService.findById(huntRequest.getSpeciesId());
 
         Hunt hunt = Hunt.builder()
-                .species(species.get())
-                 .participation(participation.get())
+                .species(species)
+                .participation(participation)
                 .weight(huntRequest.getWeight())
                 .build();
 
         huntRepository.save(hunt);
+       return participationService.updateScore(participation);
 
-        participation.get().setScore(huntRequest.getWeight() + (huntRequest.getWeight() * species.get().getDifficulty().getValue()) + species.get().getPoints());
-        participationRepository.save(participation.get());
+    }
 
-       // participationService.updateScore(participation, species,hunt.getWeight());
-
-
+    public List<Hunt> findByParticipation(Participation participation) {
+        return huntRepository.findByParticipation(participation);
     }
 }
