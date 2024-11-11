@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmail(String email);
 
-    @Procedure(procedureName = "delete_user_with_related_data3")
-    void deleteUserWithRelatedData(UUID id);
+
+    @Procedure(name = "DeleteUser")
+    void deleteUser(@Param("id") UUID id);
 }

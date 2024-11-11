@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1731316956-1
+      author: ali
+      changes:
+        - createProcedure:
+            procedureBody: |
+              CREATE OR REPLACE PROCEDURE DeleteParticipationWithHunts(participationId UUID)
+              LANGUAGE plpgsql
+              AS $$
+              BEGIN
+                  -- First, delete records from the hunt table related to participation records
+                  DELETE FROM hunt 
+                  WHERE participation_id = participationId;
+              
+                  -- Next, delete records from the participation table 
+                  DELETE FROM participation 
+                  WHERE id = participationId;
+              END;
+              $$;

@@ -5,10 +5,14 @@ import com.ali.hunter.domain.entity.Participation;
 import com.ali.hunter.service.ParticipationService;
 import com.ali.hunter.web.vm.request.ParticipationRequest;
 import com.ali.hunter.web.vm.mapper.ParticipationVmMapper;
+import com.ali.hunter.web.vm.response.CompetitionResultsResponse;
 import com.ali.hunter.web.vm.response.ParticipationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/participations")
@@ -31,5 +35,12 @@ public class ParticipationAPI {
         Participation savedParticipation = participationService.registerParticipant(participation);
         ParticipationResponse participationResponse = participationVmMapper.toParticipationResponse(savedParticipation);
         return ResponseEntity.ok(participationResponse);
+    }
+
+    @GetMapping("/results/{userId}")
+    public ResponseEntity<List<CompetitionResultsResponse>> getCompetitionResults(@PathVariable UUID userId) {
+        List<CompetitionResultsResponse> results = participationService.getCompetitionResults(userId);
+        return ResponseEntity.ok(results);
+
     }
 }

@@ -5,6 +5,7 @@ import com.ali.hunter.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
     void deleteParticipationsByUser(User userToDelete);
 
     List<Participation> findByUser(User userToDelete);
+
+    @Procedure(name = "DeleteParticipationWithHunts")
+    void deleteParticipationWithHunts(@Param("id") UUID id);
 
     @Modifying
     @Query("DELETE FROM Participation p WHERE p.user = :user")

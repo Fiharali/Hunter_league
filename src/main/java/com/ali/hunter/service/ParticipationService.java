@@ -8,15 +8,19 @@ import com.ali.hunter.exception.exps.RegistrationClosedException;
 import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import com.ali.hunter.repository.ParticipationRepository;
 import com.ali.hunter.repository.UserRepository;
+import com.ali.hunter.web.vm.response.CompetitionResultsResponse;
 import jakarta.validation.Valid;
+import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ParticipationService {
@@ -65,12 +69,7 @@ public class ParticipationService {
     @Transactional
     public void deleteParticipationsByUser(User userToDelete) {
 
-        List<Participation> participations = participationRepository.findByUser(userToDelete);
-
-        for (Participation participation : participations) {
-            huntService.deleteHuntsByParticipation(participation);
-            participationRepository.delete(participation);
-        }
+     participationRepository.deleteParticipationWithHunts(userToDelete.getId());
     }
 
     public Participation findById( UUID participationId) {
@@ -98,5 +97,29 @@ public class ParticipationService {
 
     public void save(Participation participation) {
         participationRepository.save(participation);
+    }
+
+    public List<CompetitionResultsResponse> getCompetitionResults(UUID userId) {
+       User user = userService.findById(userId)
+               .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        List<Participation> participations = participationRepository.findByUser(user);
+
+        return participations.stream()
+                .map(participation -> {
+                    Competition competition = participation.getCompetition();
+
+                    CompetitionResultsResponse response = new CompetitionResultsResponse();
+                    response.setId(competition.getId());
+                    response.setLocation(competition.getLocation());
+                    response.setDate(competition.getDate());
+                    response.setScore(participation.getScore());
+
+                    return response;
+                })
+                .sorted(Comparator.comparing(CompetitionResultsResponse::getDate))
+                .collect(Collectors.toList());
+
+
     }
 }

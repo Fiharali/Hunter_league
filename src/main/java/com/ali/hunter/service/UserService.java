@@ -90,8 +90,8 @@ public class UserService {
         User userToDelete = userRepository.findById(user.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-       participationService.deleteParticipationsByUser(userToDelete);
-        userRepository.delete(userToDelete);
+        participationService.deleteParticipationsByUser(userToDelete);
+        userRepository.deleteUser(userToDelete.getId());
         //userRepository.deleteUserWithRelatedData(user.getId());
         return userToDelete;
     }

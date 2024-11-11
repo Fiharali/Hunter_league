@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1731316955-2
+      author: ali
+      changes:
+        - createProcedure:
+            procedureBody: |
+              CREATE OR REPLACE PROCEDURE DeleteUser(userId UUID)
+              LANGUAGE plpgsql
+              AS $$
+              DECLARE
+                  participationId UUID;
+              BEGIN
+                  -- Loop through all participations of the user and call DeleteParticipationWithHunts
+                  FOR participationId IN SELECT id FROM participation WHERE user_id = userId
+                  LOOP
+                      CALL DeleteParticipationWithHunts(participationId);
+                  END LOOP;
+
+                  -- Delete user record
+                  DELETE FROM "user" WHERE id = userId;
+              END;
+              $$;
