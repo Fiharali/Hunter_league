@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,27 +100,17 @@ public class ParticipationService {
         participationRepository.save(participation);
     }
 
-    public List<CompetitionResultsResponse> getCompetitionResults(UUID userId) {
-       User user = userService.findById(userId)
-               .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        List<Participation> participations = participationRepository.findByUser(user);
 
-        return participations.stream()
-                .map(participation -> {
-                    Competition competition = participation.getCompetition();
 
-                    CompetitionResultsResponse response = new CompetitionResultsResponse();
-                    response.setId(competition.getId());
-                    response.setLocation(competition.getLocation());
-                    response.setDate(competition.getDate());
-                    response.setScore(participation.getScore());
+    public List<Participation> getParticipationResults(UUID userId, UUID competitionId) {
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-                    return response;
-                })
-                .sorted(Comparator.comparing(CompetitionResultsResponse::getDate))
-                .collect(Collectors.toList());
+        Competition competition = competitionService.findById(competitionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Competition not found"));
 
+       return participationRepository.findByUserAndCompetition(user, competition);
 
     }
 }

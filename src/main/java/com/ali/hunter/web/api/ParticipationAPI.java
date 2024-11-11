@@ -1,5 +1,6 @@
 package com.ali.hunter.web.api;
 
+import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.domain.entity.Participation;
 
 import com.ali.hunter.service.ParticipationService;
@@ -7,12 +8,16 @@ import com.ali.hunter.web.vm.request.ParticipationRequest;
 import com.ali.hunter.web.vm.mapper.ParticipationVmMapper;
 import com.ali.hunter.web.vm.response.CompetitionResultsResponse;
 import com.ali.hunter.web.vm.response.ParticipationResponse;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/participations")
@@ -37,10 +42,20 @@ public class ParticipationAPI {
         return ResponseEntity.ok(participationResponse);
     }
 
-    @GetMapping("/results/{userId}")
-    public ResponseEntity<List<CompetitionResultsResponse>> getCompetitionResults(@PathVariable UUID userId) {
-        List<CompetitionResultsResponse> results = participationService.getCompetitionResults(userId);
-        return ResponseEntity.ok(results);
+    @GetMapping("/results/{userId}/{competitionId}")
+    public ResponseEntity<List<CompetitionResultsResponse>> getCompetitionResults(@PathVariable UUID userId, @PathVariable UUID competitionId) {
+        List<Participation> participations = participationService.getParticipationResults(userId, competitionId);
 
+        List<CompetitionResultsResponse> results = participations.stream().map(participation -> {
+            Competition competition = participation.getCompetition();
+            CompetitionResultsResponse response = new CompetitionResultsResponse();
+            response.setId(competition.getId());
+            response.setLocation(competition.getLocation());
+            response.setDate(competition.getDate());
+            response.setScore(participation.getScore());
+            return response;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(results);
     }
 }

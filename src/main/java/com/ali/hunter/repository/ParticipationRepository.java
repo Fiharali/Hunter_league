@@ -1,7 +1,9 @@
 package com.ali.hunter.repository;
 
+import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.domain.entity.Participation;
 import com.ali.hunter.domain.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +20,7 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
 
     void deleteParticipationsByUser(User userToDelete);
 
-    List<Participation> findByUser(User userToDelete);
+    List<Participation> findByUser(User userToDelete, Pageable pageable);
 
     @Procedure(name = "DeleteParticipationWithHunts")
     void deleteParticipationWithHunts(@Param("id") UUID id);
@@ -26,4 +28,6 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
     @Modifying
     @Query("DELETE FROM Participation p WHERE p.user = :user")
     void deleteByUser(@Param("user") User user);
+
+    List<Participation> findByUserAndCompetition(User user, Competition competition);
 }
