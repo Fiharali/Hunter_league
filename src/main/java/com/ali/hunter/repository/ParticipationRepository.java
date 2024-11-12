@@ -30,4 +30,6 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
     void deleteByUser(@Param("user") User user);
 
     List<Participation> findByUserAndCompetition(User user, Competition competition);
+
+    List<Participation> findTop3ByCompetitionOrderByScoreDesc(Competition competition);
 }

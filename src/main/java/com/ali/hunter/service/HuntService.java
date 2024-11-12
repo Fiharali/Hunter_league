@@ -52,7 +52,12 @@ public class HuntService {
                 .build();
 
         huntRepository.save(hunt);
-       return participationService.updateScore(participation);
+
+        if (species.getMinimumWeight() <= hunt.getWeight()) {
+            return participationService.updateScore(participation);
+        }
+        return participation.getScore();
+
 
     }
 

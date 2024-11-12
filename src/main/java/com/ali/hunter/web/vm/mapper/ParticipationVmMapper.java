@@ -25,9 +25,11 @@ public interface ParticipationVmMapper {
     @Mapping(target = "code", source = "competition.code")
     ParticipationResponse toParticipationResponse(Participation participation);
 
+
+
     @Mapping(target = "location", source = "competition.location")
     @Mapping(target = "date", source = "competition.date")
+    @Mapping(target = "score", source = "score")
     List<CompetitionResultsResponse> toParticipationResultResponse(List<Participation> participations);
-
 }
 

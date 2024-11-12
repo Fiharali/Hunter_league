@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1731316699-1
+      author: ali
+      changes:
+        - sql:
+            sql: |
+              UPDATE Participation p
+              SET score = (
+                  SELECT COALESCE(SUM(
+                      h.weight + 
+                      (h.weight * 
+                          CASE s.difficulty
+                              WHEN 'COMMUN' THEN 1
+                              WHEN 'RARE' THEN 2
+                              WHEN 'EPIC' THEN 3
+                              WHEN 'LEGENDARY' THEN 5
+                              ELSE 0
+                          END
+                      ) + 
+                      s.points
+                  ), 0)
+                  FROM Hunt h
+                  INNER JOIN Species s ON h.species_id = s.id
+                  WHERE h.participation_id = p.id
+              )

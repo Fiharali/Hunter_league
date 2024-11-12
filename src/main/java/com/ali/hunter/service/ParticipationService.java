@@ -113,4 +113,13 @@ public class ParticipationService {
        return participationRepository.findByUserAndCompetition(user, competition);
 
     }
+
+    public List<Participation> getCompetitionPodium(UUID competitionId) {
+        Competition competition = competitionService.findById(competitionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Competition not found"));
+
+       return   participationRepository.findTop3ByCompetitionOrderByScoreDesc(competition);
+
+
+    }
 }

@@ -58,4 +58,11 @@ public class ParticipationAPI {
 
         return ResponseEntity.ok(results);
     }
+
+
+    @GetMapping("/podium/{competitionId}")
+    public List<CompetitionResultsResponse> getCompetitionPodium(@PathVariable UUID competitionId) {
+        List<Participation> participations = participationService.getCompetitionPodium(competitionId);
+        return participationVmMapper.toParticipationResultResponse(participations);
+    }
 }

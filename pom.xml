@@ -28,6 +28,10 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <sonar.projectKey>spring-boot-samurai</sonar.projectKey>
+        <sonar.projectName>spring-boot-samurai</sonar.projectName>
+        <sonar.projectVersion>0.0.1-SNAPSHOT</sonar.projectVersion>
+        <sonar.login>squ_cbdf33085d934b2ef7e73ff7f5841bc98dfd853f</sonar.login>
     </properties>
     <dependencies>
         <dependency>
@@ -99,6 +103,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
