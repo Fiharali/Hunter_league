@@ -65,4 +65,5 @@ public class ParticipationAPI {
         List<Participation> participations = participationService.getCompetitionPodium(competitionId);
         return participationVmMapper.toParticipationResultResponse(participations);
     }
+
 }

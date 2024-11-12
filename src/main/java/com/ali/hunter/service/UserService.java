@@ -1,16 +1,18 @@
 package com.ali.hunter.service;
 
+import com.ali.hunter.domain.entity.Competition;
+import com.ali.hunter.domain.entity.Participation;
 import com.ali.hunter.domain.entity.User;
 import com.ali.hunter.exception.exps.EmailAlreadyExisteException;
 import com.ali.hunter.exception.exps.InvalidPasswordException;
 import com.ali.hunter.exception.exps.ResourceNotFoundException;
 import com.ali.hunter.repository.UserRepository;
 import com.ali.hunter.utils.PasswordUtil;
+
+import com.ali.hunter.web.vm.mapper.UserVmMapper;
+import com.ali.hunter.web.vm.response.UserHistoryResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ParticipationService participationService;
+    private final UserVmMapper userVmMapper;
 
 
     public Page<User> searchUsers(User user , Pageable pageable) {
@@ -110,4 +114,44 @@ public class UserService {
 
         return userEntity;
     }
+
+    public Page<UserHistoryResponse> getUserCompetitionHistory(UUID userId, Pageable pageable) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Page<Participation> participations = participationService.findByUserOrderByCompetitionDateDesc(user, pageable);
+
+        List<UserHistoryResponse> historyResponses = participations.stream()
+                .map(participation -> {
+                    int rank = calculateRank(participation.getCompetition(), participation.getScore());
+                    return mapToUserHistoryResponse(participation, rank);
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(historyResponses, pageable, participations.getTotalElements());
+    }
+
+    private int calculateRank(Competition competition, double userScore) {
+        List<Participation> participations = participationService.findByCompetitionOrderByScoreDesc(competition);
+
+        for (int i = 0; i < participations.size(); i++) {
+            if (participations.get(i).getScore() == userScore) {
+                return i + 1;
+            }
+        }
+        return -1;
+    }
+
+
+    private UserHistoryResponse mapToUserHistoryResponse(Participation participation, int rank) {
+        UserHistoryResponse response = new UserHistoryResponse();
+        response.setId(participation.getId());
+        response.setLocation(participation.getCompetition().getLocation());
+        response.setDate(participation.getCompetition().getDate());
+        response.setScore(participation.getScore());
+        response.setRank(rank);
+        return response;
+    }
+
+
 }

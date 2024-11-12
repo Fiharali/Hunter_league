@@ -1,13 +1,12 @@
 package com.ali.hunter.web.api;
 
-import com.ali.hunter.domain.entity.Species;
 import com.ali.hunter.domain.entity.User;
-import com.ali.hunter.web.vm.request.SpeciesRequest;
 import com.ali.hunter.web.vm.request.UserRequest;
 import com.ali.hunter.web.vm.request.UserSearchRequest;
 import com.ali.hunter.service.UserService;
 import com.ali.hunter.web.vm.mapper.UserVmMapper;
-import com.ali.hunter.web.vm.response.SpeciesResponse;
+
+import com.ali.hunter.web.vm.response.UserHistoryResponse;
 import com.ali.hunter.web.vm.response.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -73,4 +72,14 @@ public class UserAPI {
         User deletedUser = userService.deleteUser(user);
         return ResponseEntity.ok(userVmMapper.toUserResponse(deletedUser));
     }
+
+
+    @GetMapping("/history/{id}")
+    public Page<UserHistoryResponse> getUserCompetitionHistory(@PathVariable UUID id,
+                                                               @RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("competition.date").descending());
+        return userService.getUserCompetitionHistory(id, pageable);
+    }
+
 }

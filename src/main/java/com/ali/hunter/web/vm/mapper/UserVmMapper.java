@@ -4,6 +4,7 @@ import com.ali.hunter.domain.entity.User;
 import com.ali.hunter.web.vm.request.LoginRequest;
 import com.ali.hunter.web.vm.request.UserRequest;
 import com.ali.hunter.web.vm.request.UserSearchRequest;
+import com.ali.hunter.web.vm.response.UserHistoryResponse;
 import com.ali.hunter.web.vm.response.UserResponse;
 
 import org.mapstruct.Mapper;
@@ -24,6 +25,7 @@ public interface UserVmMapper {
 
     UserResponse toUserResponse(User user);
     List<UserResponse> toUsersResponceList(Page<User> users);
+    List<UserHistoryResponse> toUserHistoryResponse(Page<User> users);
 
 }
 

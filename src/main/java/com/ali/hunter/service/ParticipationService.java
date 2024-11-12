@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,5 +122,14 @@ public class ParticipationService {
        return   participationRepository.findTop3ByCompetitionOrderByScoreDesc(competition);
 
 
+    }
+
+
+    public Page<Participation> findByUserOrderByCompetitionDateDesc(User user, Pageable pageable) {
+        return participationRepository.findParticipationByUser(user, pageable);
+    }
+
+    public List<Participation> findByCompetitionOrderByScoreDesc(Competition competition) {
+        return participationRepository.findByCompetitionOrderByScoreDesc(competition);
     }
 }

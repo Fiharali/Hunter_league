@@ -3,6 +3,7 @@ package com.ali.hunter.repository;
 import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.domain.entity.Participation;
 import com.ali.hunter.domain.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -32,4 +33,9 @@ public interface ParticipationRepository extends JpaRepository<Participation, UU
     List<Participation> findByUserAndCompetition(User user, Competition competition);
 
     List<Participation> findTop3ByCompetitionOrderByScoreDesc(Competition competition);
+
+
+    Page<Participation> findParticipationByUser(User user, Pageable pageable);
+
+    List<Participation> findByCompetitionOrderByScoreDesc(Competition competition);
 }
