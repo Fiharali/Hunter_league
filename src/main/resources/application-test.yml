@@ -1,0 +1,14 @@
+spring:
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/samurai
+    username: samurai
+    password: password
+
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+
+
