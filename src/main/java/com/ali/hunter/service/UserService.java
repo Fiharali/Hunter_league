@@ -1,5 +1,6 @@
 package com.ali.hunter.service;
 
+import com.ali.hunter.config.JwtService;
 import com.ali.hunter.domain.entity.Competition;
 import com.ali.hunter.domain.entity.Participation;
 import com.ali.hunter.domain.entity.User;
@@ -10,9 +11,15 @@ import com.ali.hunter.repository.UserRepository;
 import com.ali.hunter.utils.PasswordUtil;
 
 import com.ali.hunter.web.vm.mapper.UserVmMapper;
+import com.ali.hunter.web.vm.request.AuthRequest;
+import com.ali.hunter.web.vm.response.AuthResponse;
 import com.ali.hunter.web.vm.response.UserHistoryResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +36,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final ParticipationService participationService;
     private final UserVmMapper userVmMapper;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
 
     public Page<User> searchUsers(User user , Pageable pageable) {
@@ -153,5 +162,17 @@ public class UserService {
         return response;
     }
 
+
+    public AuthResponse loginAuth(AuthRequest authRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                authRequest.getEmail(), authRequest.getPassword()));
+
+        var user = userRepository.findByEmail(authRequest.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        var token = jwtService.generateToken(user);
+
+        return AuthResponse.builder().token(token).build();
+    }
 
 }

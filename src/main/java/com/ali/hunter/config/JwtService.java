@@ -1,4 +1,4 @@
-package com.ali.hunter.filter;
+package com.ali.hunter.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,10 +17,7 @@ import java.util.function.Function;
 public class JwtService {
 
 
-    private static final String SECRET_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC+cZhL7U55U4s8mFuf1vcafyJP\n" +
-            "8AlRM2BeQ3lRFoqEDtwA5n3wYCLgzjr9jBytVNIvsCfZoo46RiVjFJB/VdfkrNb1\n" +
-            "0E0jJcge68c8PAa/Tcf8vvM7j3k2Q/7kXs0Sk50tDelqAPBU0UVeRNZFZ8vUJJTF\n" +
-            "mxgLXr+jxCp/rhlnowIDAQAB";
+    private static final String SECRET_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC+cZhL7U55U4s8mFuf1vcafyJP8AlRM2BeQ3lRFoqEDtwA5n3wYCLgzjr9jBytVNIvsCfZoo46RiVjFJB/VdfkrNb10E0jJcge68c8PAa/Tcf8vvM7j3k2Q/7kXs0Sk50tDelqAPBU0UVeRNZFZ8vUJJTFmxgLXr+jxCp/rhlnowIDAQAB";
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
