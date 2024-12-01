@@ -27,7 +27,7 @@ public class SpeciesAPI {
     private final SpeciesService speciesService;
     private final SpeciesMapperVm speciesMapperVm;
 
-    @GetMapping
+    @GetMapping("all")
     public ResponseEntity<List<SpeciesResponse>> getSpecies(@Valid SerchByCategorySpeciesRequest serchByCategorySpeciesRequest,
                                                             @RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "10") int size) {

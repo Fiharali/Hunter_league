@@ -170,7 +170,12 @@ public class UserService {
         var user = userRepository.findByEmail(authRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        System.out.println("User Email for Token: " + user.getEmail());
+        System.out.println("User Username: " + user.getUsername());
+
         var token = jwtService.generateToken(user);
+
+        System.out.println("Generated Token: " + token);
 
         return AuthResponse.builder().token(token).build();
     }

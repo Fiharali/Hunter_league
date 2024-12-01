@@ -17,10 +17,17 @@ import java.util.function.Function;
 public class JwtService {
 
 
-    private static final String SECRET_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC+cZhL7U55U4s8mFuf1vcafyJP8AlRM2BeQ3lRFoqEDtwA5n3wYCLgzjr9jBytVNIvsCfZoo46RiVjFJB/VdfkrNb10E0jJcge68c8PAa/Tcf8vvM7j3k2Q/7kXs0Sk50tDelqAPBU0UVeRNZFZ8vUJJTFmxgLXr+jxCp/rhlnowIDAQAB";
+    private static final String SECRET_KEY = "3f+3wVmXQf4QCqaahmWBf/1Y9ysGnJsMImW4N7BJQDPqHtmWN8STm+S+7+7Jm0++EKd1y4Y/I8LNTly1ImSqKw==";
 
     public String extractEmail(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            String email = extractClaim(token, Claims::getSubject);
+
+            return email;
+        } catch (Exception e) {
+            System.out.println("Error extracting email: " + e.getMessage());
+            throw e;
+        }
     }
 
     public String generateToken(Map<String , Object> extraClaims , UserDetails userDetails) {
@@ -51,7 +58,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public boolean isTokenValid(String token,UserDetails userDetails) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String email = extractEmail(token);
         return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -28,45 +29,55 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
         final String authorizationHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userEmail;
+
+        // Add detailed logging
+        System.out.println("Authorization Header: " + authorizationHeader);
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authorizationHeader.substring(7);
+        final String jwt = authorizationHeader.substring(7);
+
         try {
-            userEmail = jwtService.extractEmail(jwt);
+            // Log extracted email
+            String userEmail = jwtService.extractEmail(jwt);
+            System.out.println("Extracted Email: " + userEmail);
+
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+                try {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+                    System.out.println("User Found: " + userDetails.getUsername());
 
-                if (jwtService.isTokenValid(jwt, userDetails)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
+                    if (jwtService.isTokenValid(jwt, userDetails)) {
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                } else {
-
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
+                } catch (UsernameNotFoundException e) {
+                    System.out.println("User Not Found: " + userEmail);
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found");
                     return;
                 }
             }
         } catch (Exception e) {
-
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
             return;
         }
 
         filterChain.doFilter(request, response);
     }
+
 
 }

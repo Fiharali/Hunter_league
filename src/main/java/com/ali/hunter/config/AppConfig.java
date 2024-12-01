@@ -24,10 +24,15 @@ public class AppConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username ->  userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            System.out.println("Attempting to load user with username/email: " + username);
+            return userRepository.findByEmail(username)
+                    .orElseThrow(() -> {
+                        System.out.println("User not found: " + username);
+                        return new UsernameNotFoundException("User not found with email: " + username);
+                    });
+        };
     }
-
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
