@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -163,21 +164,35 @@ public class UserService {
     }
 
 
+
     public AuthResponse loginAuth(AuthRequest authRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                authRequest.getEmail(), authRequest.getPassword()));
+        try {
+            User user = userRepository.findByEmail(authRequest.getEmail())
+                    .orElseThrow(() -> new BadCredentialsException("Email not found. Please check your email address."));
 
-        var user = userRepository.findByEmail(authRequest.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            try {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                authRequest.getEmail(),
+                                authRequest.getPassword()
+                        )
+                );
+            } catch (BadCredentialsException e) {
+                throw new BadCredentialsException("Incorrect password. Please try again.");
+            }
 
-        System.out.println("User Email for Token: " + user.getEmail());
-        System.out.println("User Username: " + user.getUsername());
+            var token = jwtService.generateToken(user);
 
-        var token = jwtService.generateToken(user);
+            return AuthResponse.builder()
+                    .token(token)
+                    .build();
 
-        System.out.println("Generated Token: " + token);
-
-        return AuthResponse.builder().token(token).build();
+        } catch (BadCredentialsException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Authentication failed", e);
+        }
     }
+
 
 }

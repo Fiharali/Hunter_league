@@ -22,7 +22,6 @@ public class JwtService {
     public String extractEmail(String token) {
         try {
             String email = extractClaim(token, Claims::getSubject);
-
             return email;
         } catch (Exception e) {
             System.out.println("Error extracting email: " + e.getMessage());

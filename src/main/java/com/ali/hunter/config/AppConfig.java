@@ -28,7 +28,6 @@ public class AppConfig {
             System.out.println("Attempting to load user with username/email: " + username);
             return userRepository.findByEmail(username)
                     .orElseThrow(() -> {
-                        System.out.println("User not found: " + username);
                         return new UsernameNotFoundException("User not found with email: " + username);
                     });
         };

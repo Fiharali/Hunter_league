@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers( "/api/users/login").permitAll()
                         .requestMatchers("/api/species/**").hasRole("ADMIN")
                         .requestMatchers("/api/competitions/**").hasRole("MEMBER")
-                        .requestMatchers("/api/participations/**").hasRole("JURY")
+                        .requestMatchers("/api/participations/**").hasAuthority("PERMISSION_MANAGE_PARTICIPATIONS")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
