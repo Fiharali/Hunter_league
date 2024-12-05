@@ -37,8 +37,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader("Authorization");
 
-        // Add detailed logging
-        System.out.println("Authorization Header: " + authorizationHeader);
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -48,14 +46,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt = authorizationHeader.substring(7);
 
         try {
-            // Log extracted email
             String userEmail = jwtService.extractEmail(jwt);
             System.out.println("Extracted Email: " + userEmail);
 
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-                    System.out.println("User Found: " + userDetails.getUsername());
 
                     if (jwtService.isTokenValid(jwt, userDetails)) {
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
