@@ -29,9 +29,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers( "/api/users/login").permitAll()
-                        .requestMatchers("/api/species/**").hasRole("ADMIN")
-                        .requestMatchers("/api/competitions/**").hasRole("MEMBER")
-                        .requestMatchers("/api/participations/**").hasAuthority("PERMISSION_MANAGE_PARTICIPATIONS")
+                        .requestMatchers("/api/species/**").hasAuthority("CAN_MANAGE_SPECIES")
+                        .requestMatchers("/api/competitions/**").hasAnyAuthority("CAN_MANAGE_COMPETITIONS", "CAN_PARTICIPATE", "CAN_VIEW_COMPETITIONS", "CAN_SCORE")
+                        .requestMatchers("/api/participations/**").hasAuthority("CAN_MANAGE_PARTICIPATIONS")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
