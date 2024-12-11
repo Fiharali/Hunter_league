@@ -1,4 +1,5 @@
-name: samurai
+version: '3.8'
+
 services:
   postgres:
     container_name: samurai_db
@@ -9,3 +10,31 @@ services:
       - 'POSTGRES_USER=samurai'
     ports:
       - '5433:5432'
+    networks:
+      - samurai-network
+
+  keycloak:
+    container_name: samurai_keycloak
+    image: 'quay.io/keycloak/keycloak:latest'
+    environment:
+      - 'KEYCLOAK_USER=admin'
+      - 'KEYCLOAK_PASSWORD=admin'
+      - 'DB_VENDOR=postgres'
+      - 'DB_ADDR=postgres'
+      - 'DB_DATABASE=samurai'
+      - 'DB_USER=samurai'
+      - 'DB_PASSWORD=password'
+      - 'KC_BOOTSTRAP_ADMIN_USERNAME=admin'
+      - 'KC_BOOTSTRAP_ADMIN_PASSWORD=admin'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    networks:
+      - samurai-network
+    command:
+      - "start-dev"
+
+networks:
+  samurai-network:
+    driver: bridge

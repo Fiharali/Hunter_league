@@ -1,12 +1,25 @@
 spring:
 
-
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: samurai-app
+            client-secret: 1Hg4cWIpUxk70A4HvfYpKPZ6zVYdJMXB
+            authorization-grant-type: authorization_code
+            scope: openid
+        provider:
+          keycloak:
+            authorization-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/auth
+            token-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/token
+            user-info-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/certs
 
   jpa:
     properties:
       hibernate:
         default_schema: public
-
 
   liquibase:
     enabled: true
@@ -17,3 +30,32 @@ spring:
       file: src/docker/compose.yaml
       enabled: true
       lifecycle-management: start_only
+
+
+keycloak:
+  auth-server-url: http://localhost:8080/realms/samurai-realm
+  realm: samurai-realm
+  resource: samurai-app
+  credentials:
+    secret: 1Hg4cWIpUxk70A4HvfYpKPZ6zVYdJMXB
+  bearer-only: true
+  ssl-required: external
+  public-client: false
+  use-resource-role-mappings: true
+
+
+
+server:
+  port: 8443
+  ssl:
+    key-store: keystore.jks
+    key-store-password: 12345678
+    key-store-type: JKS
+    key-alias: myalias
+    enabled: true
+
+
+
+
+
+
