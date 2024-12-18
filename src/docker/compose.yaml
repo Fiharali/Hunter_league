@@ -13,28 +13,34 @@ services:
     networks:
       - samurai-network
 
-  keycloak:
-    container_name: samurai_keycloak
-    image: 'quay.io/keycloak/keycloak:latest'
+  sonar:
+    container_name: samurai-sonarqube
+    image: sonarqube:10.3.0-community
     environment:
-      - 'KEYCLOAK_USER=admin'
-      - 'KEYCLOAK_PASSWORD=admin'
-      - 'DB_VENDOR=postgres'
-      - 'DB_ADDR=postgres'
-      - 'DB_DATABASE=samurai'
-      - 'DB_USER=samurai'
-      - 'DB_PASSWORD=password'
-      - 'KC_BOOTSTRAP_ADMIN_USERNAME=admin'
-      - 'KC_BOOTSTRAP_ADMIN_PASSWORD=admin'
+      - SONAR_FORCE_AUTHENTICATION=false
     ports:
-      - '8080:8080'
-    depends_on:
-      - postgres
+      - "127.0.0.1:9001:9000"
+      - "127.0.0.1:9000:9000"
     networks:
       - samurai-network
-    command:
-      - "start-dev"
+
+  jenkins:
+    container_name: samurai-jenkins
+    image: jenkins/jenkins:lts
+    user: root
+    environment:
+      - JENKINS_OPTS=--httpPort=8080
+    ports:
+      - '8080:8080'
+      - '50000:50000'
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - samurai-network
 
 networks:
   samurai-network:
     driver: bridge
+
+volumes:
+  jenkins_home:

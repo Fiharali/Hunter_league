@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -28,7 +29,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers( "/api/users/login").permitAll()
+                        .requestMatchers("/api/users/login", "/oauth2/authorization/**").permitAll()
                         .requestMatchers("/api/species/**").hasAuthority("CAN_MANAGE_SPECIES")
                         .requestMatchers("/api/competitions/**").hasAnyAuthority("CAN_MANAGE_COMPETITIONS", "CAN_PARTICIPATE", "CAN_VIEW_COMPETITIONS", "CAN_SCORE")
                         .requestMatchers("/api/participations/**").hasAuthority("CAN_MANAGE_PARTICIPATIONS")
@@ -39,7 +40,10 @@ public class SecurityConfig {
                         .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(AbstractAuthenticationFilterConfigurer::permitAll);
+
+
 
         return http.build();
     }
