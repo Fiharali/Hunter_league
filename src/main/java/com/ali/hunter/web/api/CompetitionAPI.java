@@ -40,7 +40,6 @@ public class CompetitionAPI {
     }
 
     @GetMapping
-
     public ResponseEntity<Page<CompetitionRepoDTO>> getCompetitions(@RequestParam(defaultValue = "0") int page,
                                                                     @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);

@@ -9,6 +9,7 @@ spring:
             client-secret: 1Hg4cWIpUxk70A4HvfYpKPZ6zVYdJMXB
             authorization-grant-type: authorization_code
             scope: openid
+            redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
         provider:
           keycloak:
             authorization-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/auth
