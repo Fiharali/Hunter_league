@@ -46,14 +46,6 @@ keycloak:
 
 
 
-server:
-  port: 8443
-  ssl:
-    key-store: keystore.jks
-    key-store-password: 12345678
-    key-store-type: JKS
-    key-alias: myalias
-    enabled: true
 
 
 
