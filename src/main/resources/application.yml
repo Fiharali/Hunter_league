@@ -44,7 +44,8 @@ keycloak:
   public-client: false
   use-resource-role-mappings: true
 
-
+server:
+  port: 8081
 
 
 
