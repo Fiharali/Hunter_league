@@ -31,6 +31,12 @@ spring:
       file: src/docker/compose.yaml
       enabled: true
       lifecycle-management: start_only
+  datasource:
+    url: jdbc:postgresql://localhost:5433/samurai
+    username: samurai
+    password: password
+    driver-class-name: org.postgresql.Driver
+
 
 
 keycloak:
@@ -46,6 +52,8 @@ keycloak:
 
 server:
   port: 8081
+
+
 
 
 
