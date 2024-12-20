@@ -8,6 +8,11 @@ pipeline {
     environment {
         SONAR_TOKEN = credentials('sonar-token')
         DOCKER_IMAGE = "samurai"
+        DB_HOST = "postgres"
+        DB_PORT = "5432"
+        DB_NAME = "samurai"
+        DB_USER = "samurai"
+        DB_PASSWORD = "password"
     }
 
     stages {
@@ -61,7 +66,14 @@ pipeline {
             steps {
                 script {
                     docker.withServer('unix:///var/run/docker.sock') {
-                        docker.build("${DOCKER_IMAGE}:latest")
+                        // Build with build args for database configuration
+                        sh """
+                            docker build -t ${DOCKER_IMAGE}:latest \
+                            --build-arg DB_URL="jdbc:postgresql://\${DB_HOST}:\${DB_PORT}/\${DB_NAME}" \
+                            --build-arg DB_USERNAME="\${DB_USER}" \
+                            --build-arg DB_PASSWORD="\${DB_PASSWORD}" \
+                            .
+                        """
                     }
                 }
             }
@@ -71,17 +83,22 @@ pipeline {
             steps {
                 script {
                     docker.withServer('unix:///var/run/docker.sock') {
-
+                        // Stop and remove existing container if it exists
                         sh '''
                             docker ps -q --filter "name=hunter-league-app" | grep -q . && docker stop hunter-league-app && docker rm -f hunter-league-app || true
                         '''
 
-
-                        docker.image("${DOCKER_IMAGE}:latest").run("""
+                        // Run new container with network configuration
+                        sh """
+                            docker run -d \
                             --name hunter-league-app \
+                            --network samurai-network \
                             -p 8080:8080 \
-                            --detach
-                        """)
+                            -e SPRING_DATASOURCE_URL="jdbc:postgresql://\${DB_HOST}:\${DB_PORT}/\${DB_NAME}" \
+                            -e SPRING_DATASOURCE_USERNAME="\${DB_USER}" \
+                            -e SPRING_DATASOURCE_PASSWORD="\${DB_PASSWORD}" \
+                            ${DOCKER_IMAGE}:latest
+                        """
                     }
                 }
             }
