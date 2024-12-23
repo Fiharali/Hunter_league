@@ -13,37 +13,9 @@ services:
     networks:
       - samurai-network
 
-  sonar:
-    container_name: samurai-sonarqube
-    image: sonarqube:10.3.0-community
-    environment:
-      - SONAR_FORCE_AUTHENTICATION=false
-    ports:
-      - "127.0.0.1:9001:9000"
-      - "127.0.0.1:9000:9000"
-    networks:
-      - samurai-network
 
-  jenkins:
-    container_name: samurai-jenkins
-    image: jenkins/jenkins:lts
-    privileged: true  # Required for Docker in Docker
-    user: root
-    environment:
-      - JENKINS_OPTS=--httpPort=8080
-    ports:
-      - '8080:8080'
-      - '50000:50000'
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket
-      - /usr/local/bin/docker:/usr/local/bin/docker  # Mount Docker binary
-    networks:
-      - samurai-network
 
 networks:
   samurai-network:
     driver: bridge
 
-volumes:
-  jenkins_home:
