@@ -1,9 +1,12 @@
 package com.ali.hunter.config;
 
+import com.ali.hunter.repository.UserRepository;
+import com.ali.hunter.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
+
+    private final UserRepository userRepository;
+
 
 
     private static final String SECRET_KEY = "3f+3wVmXQf4QCqaahmWBf/1Y9ysGnJsMImW4N7BJQDPqHtmWN8STm+S+7+7Jm0++EKd1y4Y/I8LNTly1ImSqKw==";
@@ -30,6 +37,7 @@ public class JwtService {
     }
 
     public String generateToken(Map<String , Object> extraClaims , UserDetails userDetails) {
+        extraClaims.put("role", getRole(userDetails.getUsername()));
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
@@ -38,6 +46,10 @@ public class JwtService {
                 .signWith(getSingInKey(), io.jsonwebtoken.SignatureAlgorithm.HS256)
                 .compact();
 
+    }
+
+    public String getRole(String email){
+         return userRepository.findByEmail(email).get().getRole().name();
     }
     public String generateToken(UserDetails userDetails){
         return generateToken(new HashMap<>(), userDetails);
