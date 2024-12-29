@@ -1,6 +1,7 @@
 package com.ali.hunter.web.vm.response;
 
 import com.ali.hunter.domain.enums.Role;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 public class UserResponse {
 
     private UUID id;
@@ -24,6 +26,7 @@ public class UserResponse {
     private String email;
 
     private String nationality;
+
 
 
 }

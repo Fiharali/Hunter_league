@@ -1,21 +1,6 @@
 spring:
 
-  security:
-    oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: samurai-app
-            client-secret: 1Hg4cWIpUxk70A4HvfYpKPZ6zVYdJMXB
-            authorization-grant-type: authorization_code
-            scope: openid
-            redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
-        provider:
-          keycloak:
-            authorization-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/auth
-            token-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/token
-            user-info-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/userinfo
-            jwk-set-uri: http://localhost:8080/realms/samurai-realm/protocol/openid-connect/certs
+
 
   jpa:
     properties:
@@ -31,27 +16,13 @@ spring:
       file: src/docker/compose.yaml
       enabled: true
       lifecycle-management: start_only
-  datasource:
-    url: jdbc:postgresql://localhost:5433/samurai
-    username: samurai
-    password: password
-    driver-class-name: org.postgresql.Driver
 
 
 
-keycloak:
-  auth-server-url: http://localhost:8080/realms/samurai-realm
-  realm: samurai-realm
-  resource: samurai-app
-  credentials:
-    secret: 1Hg4cWIpUxk70A4HvfYpKPZ6zVYdJMXB
-  bearer-only: true
-  ssl-required: external
-  public-client: false
-  use-resource-role-mappings: true
 
-server:
-  port: 8081
+
+
+
 
 
 
