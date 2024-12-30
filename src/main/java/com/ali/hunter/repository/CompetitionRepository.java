@@ -20,7 +20,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, UUID> 
     Page<Competition> findAll(Pageable pageable);
 
     @Query("SELECT new com.ali.hunter.repository.dto.CompetitionRepoDTO(" +
-            "c.id, c.location, c.date, SIZE(c.participations)) " +
+            "c.id, c.location, c.date, c.minParticipants , c.maxParticipants, SIZE(c.participations)) " +
             "FROM Competition c")
     Page<CompetitionRepoDTO> findAllRepoDTO(Pageable pageable);
 

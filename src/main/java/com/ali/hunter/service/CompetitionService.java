@@ -58,4 +58,8 @@ public class CompetitionService {
     public Optional<Competition> findById(UUID id) {
         return competitionRepository.findById(id);
     }
+
+    public void deleteCompetition(UUID id) {
+        competitionRepository.deleteById(id);
+    }
 }

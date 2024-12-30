@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -45,6 +46,13 @@ public class CompetitionAPI {
         Pageable pageable = PageRequest.of(page, size);
         Page<CompetitionRepoDTO> competitionDTOs = competitionService.getAllCompetition(pageable);
         return ResponseEntity.ok(competitionDTOs);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCompetition(@PathVariable UUID id) {
+        competitionService.deleteCompetition(id);
+        return ResponseEntity.noContent().build();
     }
 
 

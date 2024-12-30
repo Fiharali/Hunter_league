@@ -3,6 +3,7 @@ package com.ali.hunter.web.vm.response;
 
 
 import com.ali.hunter.domain.entity.Participation;
+import com.ali.hunter.domain.enums.SpeciesType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,12 @@ public class CompetitionResponse {
     private LocalDateTime date;
 
     private Integer participationCount = 0;
+
+    private Integer minParticipants ;
+
+    private Integer maxParticipants ;
+
+    private SpeciesType speciesType;
 
 
 
