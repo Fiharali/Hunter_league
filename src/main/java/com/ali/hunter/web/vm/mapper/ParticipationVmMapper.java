@@ -16,12 +16,17 @@ public interface ParticipationVmMapper {
     ParticipationVmMapper INSTANCE = Mappers.getMapper(ParticipationVmMapper.class);
 
     @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "firstName", source = "user.firstName")
+    @Mapping(target = "lastName", source = "user.lastName")
     ParticipationResponse toParticipationResponse(Participation participation);
 
     @Mapping(target = "competition.id", source = "competitionId")
     @Mapping(target = "user.email", source = "userEmail")
+
     Participation toParticipation(ParticipationRequest participationRequest);
 
     @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "firstName", source = "user.firstName")
+    @Mapping(target = "lastName", source = "user.lastName")
     List<ParticipationResponse> toParticipationResultResponse(List<Participation> participations);
 }
