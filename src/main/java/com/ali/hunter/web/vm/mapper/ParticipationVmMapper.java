@@ -10,26 +10,18 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface ParticipationVmMapper {
 
     ParticipationVmMapper INSTANCE = Mappers.getMapper(ParticipationVmMapper.class);
 
-    @Mapping(target = "user.id", source = "userId")
-    @Mapping(target = "competition.id", source = "competitionId")
-    Participation toParticipation(ParticipationRequest participationRequest);
-
-
     @Mapping(target = "username", source = "user.username")
-    @Mapping(target = "code", source = "competition.code")
     ParticipationResponse toParticipationResponse(Participation participation);
 
+    @Mapping(target = "competition.id", source = "competitionId")
+    @Mapping(target = "user.email", source = "userEmail")
+    Participation toParticipation(ParticipationRequest participationRequest);
 
-
-    @Mapping(target = "location", source = "competition.location")
-    @Mapping(target = "date", source = "competition.date")
-    @Mapping(target = "score", source = "score")
-    List<CompetitionResultsResponse> toParticipationResultResponse(List<Participation> participations);
+    @Mapping(target = "username", source = "user.username")
+    List<ParticipationResponse> toParticipationResultResponse(List<Participation> participations);
 }
-

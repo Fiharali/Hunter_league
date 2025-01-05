@@ -21,6 +21,8 @@
 
         private double score;
 
+        private String username;
+
 
 
     }

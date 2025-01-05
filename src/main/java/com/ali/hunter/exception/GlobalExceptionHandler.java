@@ -105,6 +105,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(AlreadyRegisteredException.class)
+    public ResponseEntity<Map<String, String>> handleAlreadyRegisteredExceptionException(AlreadyRegisteredException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<Map<String, String>> handleInvalidPasswordException(InvalidPasswordException ex) {
         Map<String, String> error = new HashMap<>();

@@ -29,7 +29,7 @@ public class HuntAPI {
     public ResponseEntity<Map<String,String>> registerResult(
             @Valid @RequestBody HuntRequest huntRequest) {
 
-           double score = huntService.registerHunt(huntRequest);
+        double score = huntService.registerHunt(huntRequest);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hunt registered successfully , and the score is "+ score );
         return ResponseEntity.ok(response);

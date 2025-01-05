@@ -12,8 +12,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParticipationRequest {
-    @NotNull(message = "User ID cannot be null")
-    private UUID userId;
+    @NotNull(message = "User email cannot be null")
+    private String userEmail;
 
     @NotNull(message = "Competition ID cannot be null")
     private UUID competitionId;

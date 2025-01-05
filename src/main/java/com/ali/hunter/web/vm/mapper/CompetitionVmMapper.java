@@ -13,10 +13,13 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CompetitionVmMapper {
 
+
+
     Competition toCompetition(CompetitionRequest competitionRequest);
 
 
     CompetitionResponse toCompetitionResponse(Competition competition);
+
 
     List<CompetitionResultsResponse> toCompetitionResultsResponse(List<Competition> competitions);
 

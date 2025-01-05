@@ -62,9 +62,19 @@ public class ParticipationAPI {
 
 
     @GetMapping("/podium/{competitionId}")
-    public List<CompetitionResultsResponse> getCompetitionPodium(@PathVariable UUID competitionId) {
+    public List<ParticipationResponse> getCompetitionPodium(@PathVariable UUID competitionId) {
         List<Participation> participations = participationService.getCompetitionPodium(competitionId);
         return participationVmMapper.toParticipationResultResponse(participations);
+    }
+
+
+    @GetMapping("/{competitionId}")
+    public ResponseEntity<List<ParticipationResponse>> getParticipationByCompetition( @PathVariable UUID competitionId) {
+        List<Participation> participations = participationService.getParticipationByCompetition(competitionId);
+        List<ParticipationResponse> participationResponses = participations.stream()
+                .map(participationVmMapper::toParticipationResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(participationResponses);
     }
 
 }

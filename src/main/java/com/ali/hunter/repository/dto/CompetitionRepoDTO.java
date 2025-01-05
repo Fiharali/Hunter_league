@@ -1,6 +1,5 @@
 package com.ali.hunter.repository.dto;
 
-import com.ali.hunter.domain.enums.SpeciesType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +20,11 @@ public class CompetitionRepoDTO {
 
     private LocalDateTime date;
 
-    private Integer participationCount;
-
     private Integer minParticipants ;
 
     private Integer maxParticipants ;
+
+    private Integer participationCount;
 
 
 }
