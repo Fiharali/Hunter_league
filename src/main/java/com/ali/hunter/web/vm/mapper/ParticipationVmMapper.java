@@ -21,7 +21,7 @@ public interface ParticipationVmMapper {
     ParticipationResponse toParticipationResponse(Participation participation);
 
     @Mapping(target = "competition.id", source = "competitionId")
-    @Mapping(target = "user.email", source = "userEmail")
+    @Mapping(target = "user.email", source = "userEmail"    )
 
     Participation toParticipation(ParticipationRequest participationRequest);
 

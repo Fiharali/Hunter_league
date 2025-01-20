@@ -1,7 +1,5 @@
+
 spring:
-
-
-
   jpa:
     properties:
       hibernate:
@@ -11,6 +9,12 @@ spring:
     enabled: true
     change-log: db/changelog/master.yaml
 
+  datasource:
+    url: jdbc:postgresql://db:5433/samurai
+    username: samurai
+    password: password
+    driver-class-name: org.postgresql.Driver
+
   docker:
     compose:
       file: src/docker/compose.yaml
@@ -18,17 +22,5 @@ spring:
       lifecycle-management: start_only
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+server:
+  port: 8080
